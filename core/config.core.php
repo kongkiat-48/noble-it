@@ -6,7 +6,7 @@ define('DB_HOST', 'localhost:3306');
 define('DB_USERNAME', 'root');
 
 // MySQL database password
-define('DB_PASSWORD', '');
+define('DB_PASSWORD', 'root');
 
 // MySQL database name
 define('DB_NAME', 'keep_nb_it');
