@@ -50,7 +50,7 @@ require_once 'procress/dataSetting.php';
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h5 class="modal-title font-weight-bold">รายการเข้าถึงเมนู</h5>
+					<h5 class="modal-title font-weight-bold">แก้ไขข้อมูลอีเมล</h5>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
@@ -71,6 +71,36 @@ require_once 'procress/dataSetting.php';
 		</div>
 	</form><!-- /.modal-dialog -->
 </div>
+
+
+<!-- EditMail access -->
+<div class="modal fade" id="editMail" tabindex="-1" role="dialog" aria-labelledby="modal_editMail" aria-hidden="true">
+	<form method="post" action="<?php echo $SERVER_NAME; ?>" class="was-validated">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title font-weight-bold">รายการเข้าถึงเมนู</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="editMail">
+
+				</div>
+				<div class="modal-footer">
+					<div class="col text-center">
+
+						<button class="ladda-button btn btn-primary btn-square btn-ladda bg-warning" type="submit" name="save_editMail" data-style="expand-left">
+							<span class="fas fa-save"> บันทึก</span>
+							<span class="ladda-spinner"></span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form><!-- /.modal-dialog -->
+</div>
+
 <div class="card card-default">
 	<div class="card-header card-header-border-bottom">
 		<h2>ตั้งค่าผู้ใช้งาน </h2>
@@ -210,6 +240,7 @@ require_once 'procress/dataSetting.php';
 									<td>ลำดับ</td>
 									<td>ชื่อ - นามสกุล</td>
 									<td>Username</td>
+									<td>Email</td>
 									<td>จัดการ</td>
 								</tr>
 							</thead>
@@ -225,9 +256,11 @@ require_once 'procress/dataSetting.php';
 										<td><?php echo @getemployee($showalluser->user_key); ?></td>
 
 										<td><?php echo @$showalluser->username; ?></td>
+										<td><?php echo @$showalluser->email; ?></td>
 										<td>
 											<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit_user" data-whatever="<?php echo @$showalluser->id; ?>" data-top="toptitle" data-placement="top" title="แก้ไข"><i class="fa fa-edit fa-fw"></i></button>
 											<button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#access" data-whatever="<?php echo @$showalluser->user_key; ?>" data-top="toptitle" data-placement="right" title="การเข้าถึงเมนู"><i class="fa fa-sitemap fa-fw"></i></button>
+											<button class="btn btn-warning btn-sm" data-toggle="modal" data-target="#editMail" data-whatever="<?php echo @$showalluser->id; ?>" data-top="toptitle" data-placement="right" title="แก้ไขอีเมล"><i class="fas fa-envelope"></i></button>
 											<?php
 											if ($_SESSION['uclass'] == 3) { ?>
 												<!-- if ($showalluser->user_status == '1') {

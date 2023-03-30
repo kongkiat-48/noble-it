@@ -198,6 +198,16 @@ if (isset($_POST['save_status'])) {
 	}
 }
 
+if (isset($_POST['save_editMail'])) {
+	$getdata->my_sql_update(
+		$connect,
+		"user",
+		"email ='" . htmlspecialchars($_POST['email']) . "'",
+		"id='" . htmlspecialchars($_POST['id_user']) . "'"
+	);
+	$alert = $saveedit;
+}
+
 if (isset($_POST['save_edit_status'])) {
 	if (htmlspecialchars($_POST['edit_name_status']) != NULL) {
 		$getdata->my_sql_update(

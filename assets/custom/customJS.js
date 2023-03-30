@@ -835,6 +835,27 @@ $(function () {
     });
   })
 
+  
+  $('#editMail').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    var modal = $(this);
+    var dataString = 'key=' + recipient;
+
+    $.ajax({
+      type: "GET",
+      url: "settings/edit/editMail.php",
+      data: dataString,
+      cache: false,
+      success: function (data) {
+        modal.find('.editMail').html(data);
+      },
+      error: function (err) {
+        console.log(err);
+      }
+    });
+  })
+
   $('#edit_status').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var recipient = button.data('whatever') // Extract info from data-* attributes
