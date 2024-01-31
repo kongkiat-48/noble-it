@@ -9,6 +9,7 @@ jQuery(document).ready(function () {
   jQuery('#responsive-data-table-summary').DataTable({
     "aLengthMenu": [[10,20, 30, 50, 75, -1], [10,20, 30, 50, 75, "All"]],
     "autoWidth": false,
+    "order": [[0,'ASC']],
     // "columnDefs": [
       // {"width": "2%", "targets": 0},
       // {"width": "2%", "targets": 1},
@@ -24,7 +25,7 @@ jQuery(document).ready(function () {
       // {"width": "7.6%", "targets": 11},
       // {"width": "7.6%", "targets": 12},
     // ], 
-    "pageLength": 10,
+    "pageLength": 50,
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
   jQuery('#responsive-data-table-summary-2').DataTable({
@@ -152,6 +153,14 @@ $(function () {
       'pageLength'
 
     ],
+  });
+
+
+
+  $('#for-home').DataTable({
+    // dom: 'Bfrtip',
+    scrollX: true,
+    searching: true,
   });
 
   $('#ForExport2').DataTable({
@@ -500,6 +509,46 @@ $(function () {
       cache: false,
       success: function (data) {
         modal.find('.offcase').html(data);
+      },
+      error: function (err) {
+        console.log(err);
+      }
+    });
+  });
+
+  $('#approve-frm').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    var modal = $(this);
+    var dataString = 'key=' + recipient;
+
+    $.ajax({
+      type: "GET",
+      url: "otherfrm/approve_frm.php",
+      data: dataString,
+      cache: false,
+      success: function (data) {
+        modal.find('.approve-frm').html(data);
+      },
+      error: function (err) {
+        console.log(err);
+      }
+    });
+  });
+
+  $('#approve-hr').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    var modal = $(this);
+    var dataString = 'key=' + recipient;
+
+    $.ajax({
+      type: "GET",
+      url: "otherfrm/approve_hr.php",
+      data: dataString,
+      cache: false,
+      success: function (data) {
+        modal.find('.approve-hr').html(data);
       },
       error: function (err) {
         console.log(err);
@@ -1193,6 +1242,27 @@ function deleteEmployee(em_key) {
         showConfirmButton: false
       })
       window.location = "function.php?type=delete_employee&key=" + em_key;
+    }
+  })
+}
+
+function deleteManager(id) {
+  Swal.fire({
+    title: 'ต้องการลบข้อมูลนี้ใช่หรือไม่',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'ยืนยันการลบ',
+    cancelButtonText: 'ยกเลิก'
+  }).then((result) => {
+    if (result.value) {
+      Swal.fire({
+        title: "Deleted !!!",
+        html: "<h4>กำลังลบข้อมูล...</h4>",
+        showConfirmButton: false
+      })
+      window.location = "function.php?type=delete_manager&key=" + id;
     }
   })
 }

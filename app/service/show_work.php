@@ -354,7 +354,7 @@ if (isset($_POST['save_offcase'])) {
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status = '2e34609794290a770cb0349119d78d21' AND (date LIKE '%" . date("Y-m") . "%' ) ORDER BY ticket DESC");
+                                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status IN ('fe8ae3ced9e7e738d78589bf6610c4da','2e34609794290a770cb0349119d78d21') AND (date LIKE '%" . date("Y-m") . "%' ) ORDER BY ticket DESC");
                                         while ($show_total = mysqli_fetch_object($get_total)) {
                                         ?>
                                             <tr>
@@ -409,7 +409,7 @@ if (isset($_POST['save_offcase'])) {
                                     </thead>
                                     <tbody>
                                         <?php
-                                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status IS NULL AND date LIKE '%" . date("Y") . "%' ORDER BY ticket DESC");
+                                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status NOT IN ('fe8ae3ced9e7e738d78589bf6610c4da','2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214') AND date LIKE '%" . date("Y") . "%' ORDER BY ticket DESC");
                                         while ($show_total = mysqli_fetch_object($get_total)) {
                                         ?>
                                             <tr>

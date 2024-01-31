@@ -125,7 +125,7 @@ date_default_timezone_set('Asia/Bangkok');
     </div>
     <div class="copyright pl-0">
       <p class="text-center">
-        <small>&copy;&nbsp;2018 - <?php echo date('Y'); ?>&nbsp;Service Service Noble Restaurant.</small>
+        <small>&copy;&nbsp;2018 - <?php echo date('Y'); ?>&nbsp;Service Service IT By Kongkiat.</small>
       </p>
       <input type="text" hidden value="">
     </div>

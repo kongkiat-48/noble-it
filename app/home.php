@@ -8,6 +8,7 @@ echo @$alert;
     setInterval(function() {
         $('#get_sum_it').load('auto/sum_case_it.php');
         $('#get_table_it').load('auto/table_it_user.php');
+        $('#list_approve').load('auto/list_approve.php');
 
     }, 1000) /* time in milliseconds (ie 2 seconds)*/
 </script>
@@ -77,14 +78,21 @@ echo @$alert;
                     <div class="form-group row">
                         <div class="col-6">
                             <label for="namecall">ผู้แจ้ง</label>
-                            <input type="text" class="form-control input-sm" name="namecall" id="namecall" required>
+                            <!-- <input type="text" class="form-control input-sm" name="namecall" id="namecall" required> -->
+                            <select name="namecall" id="namecall" class="form-control select2bs4" required style="width: 100%;">
+                                <option value="">--- เลือกข้อมูล ---</option>
+                                <?php $getuser = $getdata->my_sql_select($connect, NULL, "user", "user_status = '1'");
+                                while ($showUser = mysqli_fetch_object($getuser)) {
+                                    echo '<option value="' . $showUser->user_key . '">' .  getemployee($showUser->user_key) . '</option>';
+                                }
+                                ?>
+                            </select>
                             <div class="invalid-feedback">
                                 ระบุ ผู้แจ้ง.
                             </div>
                         </div>
                         <div class="col-6">
                             <label for="location">สาขา</label>
-
                             <select class="form-control select2bs4" style="width: 100%;" name="location" id="location" required>
                                 <option value="">--- เลือก สาขา ---</option>
                                 <?php
@@ -103,10 +111,8 @@ echo @$alert;
                     <div class="form-group row">
                         <div class="col-12">
                             <label for="approve">ผู้อนุมัติ</label>
-                            <input type="text" class="form-control input-sm" name="approve" id="approve">
-                            <div class="invalid-feedback">
-                                ระบุ สาขา.
-                            </div>
+                            <!-- <input type="text" class="form-control input-sm" name="approve" id="approve"> -->
+                            <input type="text" class="form-control input-sm" id="approve" name="approve">
                         </div>
                     </div>
                     <input type="text" hidden name="name_em" id="name_em" value="<?php echo @getemployee($userdata->user_key); ?>" class="form-control" readonly>
@@ -199,6 +205,25 @@ echo @$alert;
 
 <!-- End Cancel -->
 
+<div class="modal fade" id="approve-frm" role="dialog" aria-labelledby="approve-frm" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form method="post" enctype="multipart/form-data" class="was-validated" id="waitsave2">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">เปลี่ยนแปลง</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="approve-frm">
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
 
 <div class="bg-white border rounded">
     <div class="row no-gutters">
@@ -237,12 +262,22 @@ echo @$alert;
                         <a class="nav-link active" id="it-tab" data-toggle="tab" href="#it" role="tab" aria-controls="it" aria-selected="false">ฝ่ายเทคโนโลยีสารสนเทศ</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="summary-tab" data-toggle="tab" href="#summary" role="tab" aria-controls="summary" aria-selected="true">
+                        <a class="nav-link" id="summary-tab" data-toggle="tab" href="#summary" role="tab" aria-controls="summary" aria-selected="false">
                             ค้นหารายงานแจ้ง</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">เปลี่ยนแปลงข้อมูล</a>
                     </li>
+                    <?php
+                    $chkManager =  $getdata->my_sql_query($connect, NULL, "manager", "manager_user_key = '" . $userdata->user_key . "'");
+
+                    if (COUNT($chkManager->id) >= 1) {
+                    ?>
+                        <li class="nav-item">
+                            <a class="nav-link" id="approve-list-tab" data-toggle="tab" href="#approve-list" role="tab" aria-controls="approve-list" aria-selected="false">
+                                รายการอนุมัติ</a>
+                        </li>
+                    <?php } ?>
                 </ul>
                 <hr>
                 <div class="tab-content px-3 px-xl-5" id="myTabContent">
@@ -299,10 +334,42 @@ echo @$alert;
 
                     </div>
 
+                    <div class="tab-pane fade" id="approve-list" role="tabpanel" aria-labelledby="approve-list-tab">
+                        <div class="mt-5">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="basic-data-table">
+                                        <table class="table nowrap text-center" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Case ID</th>
+                                                    <th>Ticket</th>
+                                                    <th>Date</th>
+                                                    <th>Time</th>
+                                                    <th>Status</th>
+                                                    <th>Date success</th>
+
+                                                    <th>จัดการ</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id="list_approve">
+
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab">
                         <div class="mt-5">
                             <div class="responsive-data-table-it">
-                                <table id="responsive-data-table-it" class="table dt-responsive hover" style="width:100%">
+                                <!-- <table id="responsive-data-table-it" class="table dt-responsive hover" style="width:100%"> -->
+                                <table id="for-home" class="table dt-responsive nowrap hover" style="font-family: sarabun; font-size: 14px;
+    text-align: center;" width="100%">
                                     <thead class="font-weight-bold text-center">
                                         <tr>
                                             <!-- <td>ลำดับ</td> -->
@@ -327,9 +394,9 @@ echo @$alert;
                                         <?php
                                         $i = 0;
                                         if ($_SESSION['uclass'] == 3 || $_SESSION['uclass'] == 2) {
-                                            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "ID AND (date LIKE '%" . date("Y") . "%' ) ORDER BY ticket DESC LIMIT 500 ");
+                                            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "ID AND (date LIKE '%" . date("Y") . "%' ) AND card_status != 'wait_approve' AND manager_approve_status != 'N' AND approve_department != 'HR' ORDER BY ticket DESC LIMIT 500 ");
                                         } else {
-                                            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "ID AND (date LIKE '%" . date("Y") . "%' ) AND user_key = '" . $_SESSION['ukey'] . "' ORDER BY ticket");
+                                            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "ID AND (date LIKE '%" . date("Y") . "%' ) AND user_key = '" . $_SESSION['ukey'] . "' OR manager_approve = '" . $_SESSION['ukey'] . "' AND card_status != 'wait_approve' AND manager_approve_status != 'N' ORDER BY ticket");
                                         }
 
                                         while ($show_total = mysqli_fetch_object($get_total)) {
@@ -340,7 +407,19 @@ echo @$alert;
                                                 <td><?php echo @$show_total->ticket; ?></td>
 
                                                 <!-- <td><?php echo @getemployee($show_total->user_key); ?></td> -->
-                                                <td><?php echo $show_total->se_namecall; ?></td>
+                                                <td>
+                                                    <!-- <?php echo $show_total->se_namecall; ?> -->
+                                                    <?php
+                                                    $search = $getdata->my_sql_query($connect, NULL, "employee", "card_key ='" . $show_total->se_namecall . "'");
+                                                    if (COUNT($search) == 0) {
+                                                        $chkName = $show_total->se_namecall;
+                                                    } else {
+                                                        $chkName = getemployee($show_total->se_namecall);
+                                                    }
+
+                                                    echo $chkName;
+                                                    ?>
+                                                </td>
                                                 <!-- <td><?php echo @getemployee_department($show_total->user_key); ?></td> -->
                                                 <td><?php echo @prefixbranch($show_total->se_location); ?></td>
 
@@ -484,3 +563,19 @@ echo @$alert;
         </div>
     </div>
 </div>
+
+<script>
+    $(document).ready(function() {
+        $("#namecall").change(function() {
+            var selectedValue = $(this).val();
+
+            // ส่งค่าที่เลือกไปยัง PHP
+            $.post("getmanager.php", {
+                value: selectedValue
+            }, function(data) {
+                // แสดงผลลัพธ์ใน input
+                $("#approve").val(data);
+            });
+        });
+    });
+</script>

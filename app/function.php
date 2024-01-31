@@ -205,6 +205,10 @@ switch (htmlspecialchars($_GET['type'])) {
 		$getdata->my_sql_update($connect, "user", "user_status = '0'", "user_key='" . htmlspecialchars($_GET['key']) . "'");
 		echo '<script>window.history.back();</script>';
 		break;
+	case "delete_manager":
+		$getdata->my_sql_delete($connect, "manager", "id='" . htmlspecialchars($_GET['key']) . "'");
+		echo '<script>window.history.back();</script>';
+		break;
 	case "delete_cardtype":
 		$getdata->my_sql_update($connect, "card_type", "ctype_status='2'", "ctype_key='" . htmlspecialchars($_GET['key']) . "'");
 		echo '<script>window.history.back();</script>';

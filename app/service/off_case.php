@@ -27,6 +27,7 @@ $get_admin = $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $_S
         if ($_SESSION['uclass'] == 1) {
           echo '<option value="57995055c28df9e82476a54f852bd214">ยกเลิกการแจ้ง</option>';
           echo '<option value="5cafc78523f4f5e4812f9545b2ba5ae7">แจ้งดำเนินการอีกครั้ง</option>';
+          echo '<option value="fe8ae3ced9e7e738d78589bf6610c4da">ดำเนินงานเรียบร้อยแล้ว</option>';
         } else {
           while ($show_status = mysqli_fetch_object($select_status)) {
             if ($show_status->ctype_key == $chk_case->card_status) {
@@ -38,6 +39,7 @@ $get_admin = $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $_S
         }
 
 
+        
         ?>
 
       </select>
@@ -80,26 +82,26 @@ $get_admin = $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $_S
     </div>
   </div>
 
-  <div class="form-group row">
-    <div class="col-md-6 col-sm-12">
-      <label for="pic_after">รูปภาพหลังแก้ไขแล้ว</label>
-      <input type="file" name="pic" id="pic_after" class="form-control">
-    </div>
-    <div class="col-md-6 col-sm-12">
-      <label for="currency-field">ค่าใช้จ่าย</label>
-
-      <input type="text" class="form-control" name="price" id="currency-field" value="<?php
-                                                                                      if ($chk_case->se_price != NULL) {
-                                                                                        echo $chk_case->se_price;
-                                                                                      } ?>" required data-type="currency" placeholder="0.00">
-      <div class="invalid-feedback">
-        ระบุ ค่าใช้จ่าย.
+  <?php if ($_SESSION['uclass'] != 1) { ?>
+    <div class="form-group row">
+      <div class="col-md-6 col-sm-12">
+        <label for="pic_after">รูปภาพหลังแก้ไขแล้ว</label>
+        <input type="file" name="pic" id="pic_after" class="form-control">
       </div>
+      <div class="col-md-6 col-sm-12">
+        <label for="currency-field">ค่าใช้จ่าย</label>
 
-
-
+        <input type="text" class="form-control" name="price" id="currency-field" value="<?php
+                                                                                        if ($chk_case->se_price != NULL) {
+                                                                                          echo $chk_case->se_price;
+                                                                                        } ?>" required data-type="currency" placeholder="0.00">
+        <div class="invalid-feedback">
+          ระบุ ค่าใช้จ่าย.
+        </div>
+      </div>
     </div>
-  </div>
+  <?php } ?>
+
 
 </div>
 

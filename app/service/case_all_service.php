@@ -55,7 +55,7 @@ $card_detail = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='"
             <!-- <td><?php echo $showcard_status->ID ?></td> -->
               <!-- <!-- <td align="center"><?php echo @dateTimeConvertor($showcard_status->date); ?></td>dateTimeConvertor -->
               <td align="center"><?php echo @dateTimeConvertor($showcard_status->date); ?></td>
-              <td align="center"><?php echo @cardStatus($showcard_status->card_status); ?></td>
+              <td align="center"><?php echo $showcard_status->card_status != null ? @cardStatus($showcard_status->card_status) : '<span class="badge badge-warning" style="color:#FFF;">สถานะขออนุมัติ</span>'; ?></td>
               <td style="text-align: center;">
                 <?php
                 if (@$showcard_status->comment != NULL) {

@@ -14,7 +14,7 @@
 </nav>
 
 <div class="row">
-    <div class="col-lg-6">
+    <div class="col-12">
         <div class="card card-default">
             <div id="accordion1" class="accordion accordion-shadow">
                 <div class="card">
@@ -36,16 +36,16 @@
             </div>
         </div>
     </div>
-
-
-    <div class="col-lg-6">
+</div>
+<div class="row">
+    <div class="col-12">
         <div class="card card-default">
             <div id="accordion2" class="accordion accordion-shadow">
 
                 <div class="card">
                     <div class="card-header" id="headingTwo">
                         <button class="btn btn-link" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                            งานแต่ละประเภท
+                            งานแต่ละสถานะ
                         </button>
                     </div>
                     <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordion2">
@@ -62,15 +62,14 @@
     </div>
 </div>
 
-
 <div class="row">
-    <div class="col-lg-6">
+    <div class="col-12">
         <div class="card card-default">
             <div id="accordion3" class="accordion accordion-shadow">
                 <div class="card">
                     <div class="card-header" id="headingThree">
                         <button class="btn btn-link" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
-                            สถานะงานแยก 4 ประเภทประจำปี <u><?php echo date('Y') + 543; ?></u>
+                            สถานะงานแยก 5 ประเภทประจำปี <u><?php echo date('Y') + 543; ?></u>
                         </button>
                     </div>
 
@@ -114,7 +113,7 @@ $sumsuccess = $getdata->my_sql_show_rows($connect, "problem_list", "card_status 
 $sumcancel = $getdata->my_sql_show_rows($connect, "problem_list", "card_status = '57995055c28df9e82476a54f852bd214' AND  date LIKE '" . date("Y") . "%'");
 $sumstartwork = $getdata->my_sql_show_rows($connect, "problem_list", "card_status = 'befb5e146e599a9876757fb18ce5fa2e' AND date_update != '0000-00-00' AND date_update LIKE '" . date("Y") . "%'");
 $sumnull = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IS NULL AND date_update = '0000-00-00'");
-
+$sumSuccessFromUser = $getdata->my_sql_show_rows($connect, "problem_list", "card_status = 'fe8ae3ced9e7e738d78589bf6610c4da' AND date_update IS NOT NULL");
 ?>
 
 
@@ -137,7 +136,6 @@ $sumnull = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IS 
                 while ($show = mysqli_fetch_object($getstatus)) {
                     $showquery = $getdata->my_sql_show_rows($connect, "problem_list", "card_status = '$show->ctype_key'");
                     if ($showquery > 0) { ?>
-
                         {
                             label: '<?php echo $show->ctype_name; ?>',
                             data: [
@@ -180,17 +178,19 @@ $sumnull = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IS 
             labels: [
                 'ยกเลิกการแจ้ง',
                 'รับดำเนินการ',
-                'ดำเนินการเสร็จสิ้น',
-                'รอดำเนินการ'
+                'แก้ไขเรียบร้อย',
+                'รอดำเนินการ',
+                'ดำเนินงานเรียบร้อยแล้ว'
             ],
             datasets: [{
                 label: 'My First Dataset',
-                data: [<?php echo $sumcancel; ?>, <?php echo $sumstartwork; ?>, <?php echo $sumsuccess; ?>, <?php echo $sumnull; ?>],
+                data: [<?php echo $sumcancel; ?>, <?php echo $sumstartwork; ?>, <?php echo $sumsuccess; ?>, <?php echo $sumnull; ?>,<?php echo $sumSuccessFromUser; ?>],
                 backgroundColor: [
                     'rgb(255, 0, 0)',
                     'rgb(0, 255, 255)',
                     'rgb(0, 255, 0)',
-                    'rgb(255, 128, 0)'
+                    'rgb(255, 128, 0)',
+                    'rgb(234, 178, 0)'
                 ],
                 hoverOffset: 4
             }]

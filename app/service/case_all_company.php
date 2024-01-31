@@ -89,7 +89,7 @@ $getmenus = $getdata->my_sql_query($connect, null, 'menus', "menu_status ='1' AN
                   </thead>
                   <tbody>
                      <?php
-                     $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "company = '" . $card_detail->company . "' AND card_status = '2e34609794290a770cb0349119d78d21'  ORDER BY ID DESC"); //AND (date LIKE '%" . date("Y") . "%')
+                     $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "company = '" . $card_detail->company . "' AND card_status IN ('fe8ae3ced9e7e738d78589bf6610c4da','2e34609794290a770cb0349119d78d21')  ORDER BY ID DESC"); //AND (date LIKE '%" . date("Y") . "%')
                      while ($show_total = mysqli_fetch_object($get_total)) {
                      ?>
                         <tr>
@@ -154,7 +154,7 @@ $getmenus = $getdata->my_sql_query($connect, null, 'menus', "menu_status ='1' AN
                   </thead>
                   <tbody>
                      <?php
-                     $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "company = '" . $card_detail->company . "' AND card_status IS NULL  ORDER BY ticket DESC"); //AND date LIKE '%" . date("Y") . "%'
+                     $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "company = '" . $card_detail->company . "' AND card_status NOT IN ('fe8ae3ced9e7e738d78589bf6610c4da','2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214')  ORDER BY ticket DESC"); //AND date LIKE '%" . date("Y") . "%'
                      while ($show_total = mysqli_fetch_object($get_total)) {
                      ?>
                         <tr>

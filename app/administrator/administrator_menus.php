@@ -33,25 +33,25 @@
 					<div class="form-group row">
 						<div class="col-md-6 col-sm-12">
 							<label for="menu_name">ชื่อเมนู</label>
-							<input type="text" id="menu_name" name="menu_name" class="form-control" autocomplete="off" required>
+							<input type="text" id="menu_name" name="menu_name" class="form-control input-sm" autocomplete="off" required>
 						</div>
 						<div class="col-md-6 col-sm-12">
-							<label for="menu_icon">ไอคอนเมนู <a href="https://fontawesome.com/icons?d=gallery&m=free" target="_blank"><i class="fa fa-question-circle"></i></a></label>
-							<input type="text" id="menu_icon" name="menu_icon" class="form-control" placeholder="Ex. fa-home" autocomplete="off" required>
+							<label for="menu_icon">ไอคอนเมนู <a href="https://fontawesome.com/v5/search?m=free" target="_blank"><i class="fa fa-question-circle"></i></a></label>
+							<input type="text" id="menu_icon" name="menu_icon" class="form-control input-sm" placeholder="Ex. fa-home" autocomplete="off" required>
 						</div>
 					</div>
 					<div class="form-group row">
 						<div class="col-md-5 col-sm-12">
 							<label for="menu_folder">โฟลเดอร์</label>
-							<input type="text" id="menu_folder" name="menu_folder" class="form-control" required>
+							<input type="text" id="menu_folder" name="menu_folder" class="form-control input-sm" required>
 						</div>
 						<div class="col-md-5 col-sm-12">
 							<label for="menu_link">Link menu</label>
-							<input type="text" id="menu_link" name="menu_link" class="form-control" placeholder="Ex. ?p=index" autocomplete="off" required>
+							<input type="text" id="menu_link" name="menu_link" class="form-control input-sm" placeholder="Ex. ?p=index" autocomplete="off" required>
 						</div>
 						<div class="col-md-2 col-sm-12">
 							<label for="sorting">ลำดับเมนู</label>
-							<input type="number" id="sorting" name="sorting" class="form-control" min="1" max="99" required>
+							<input type="number" id="sorting" name="sorting" class="form-control input-sm" min="1" max="99" required>
 						</div>
 					</div>
 				</div>
@@ -115,7 +115,7 @@
 				<div class="card shadow">
 					<div class="card-body">
 
-
+					<button class="btn btn-danger btn-xs float-right mb-2 btn-outline" data-toggle="modal" data-target="#modal_new_menu"><i class="fa fa-plus fa-fw"></i> เพิ่มรายการเมนู</button>
 
 						<div class="table-responsive">
 							<table class="table table-bordered table-hover text-center" width="100%">

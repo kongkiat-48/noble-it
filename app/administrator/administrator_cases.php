@@ -67,18 +67,18 @@ if (isset($_POST['save_edit_page'])) {
 					<div class="form-group row">
 						<div class="col-md-4 col-sm-12">
 							<label for="page_name">ชื่อไฟล์</label>
-							<input type="text" name="page_name" id="page_name" class="form-control" required autocomplete="off">
+							<input type="text" name="page_name" id="page_name" class="form-control input-sm" required autocomplete="off">
 							<div class="invalid-feedback">
 								*** ใส่เฉพาะชื่อไฟล์ไม่ต้องมี .php ***
 							</div>
 						</div>
 						<div class="col-md-4 col-sm-12">
 							<label for="folder_name">หมวดหมู่</label>
-							<input type="text" name="folder_name" id="folder_name" class="form-control" required autocomplete="off">
+							<input type="text" name="folder_name" id="folder_name" class="form-control input-sm" required autocomplete="off">
 						</div>
 						<div class="col-md-4 col-sm-12">
 							<label for="link_name">Part File</label>
-							<input type="text" name="link_name" id="link_name" class="form-control" required autocomplete="off">
+							<input type="text" name="link_name" id="link_name" class="form-control input-sm" required autocomplete="off">
 						</div>
 
 					</div>
@@ -140,9 +140,7 @@ if (isset($_POST['save_edit_page'])) {
 				<div class="card shadow">
 					<div class="card-body m-2">
 						<div class="row">
-							
-								<button class="btn btn-danger btn-xs float-right mb-2 btn-outline" data-toggle="modal" data-target="#modal_new_link"><i class="fa fa-plus fa-fw"></i> เพิ่มรายการลิงค์หน้า</button>
-							
+							<button class="btn btn-danger btn-xs float-right mb-2 btn-outline" data-toggle="modal" data-target="#modal_new_link"><i class="fa fa-plus fa-fw"></i> เพิ่มรายการลิงค์หน้า</button>
 						</div>
 
 						<div class="responsive-data-table-1">
@@ -153,7 +151,7 @@ if (isset($_POST['save_edit_page'])) {
 										<td>ชื่อไฟล์ระบบ</td>
 										<td>หมวดหมู่</td>
 										<td>ที่อยู่ไฟล์</td>
-
+										<td>จัดการ</td>
 									</tr>
 								</thead>
 								<tbody>
@@ -171,7 +169,19 @@ if (isset($_POST['save_edit_page'])) {
 
 												<?php echo @$showlink->pages; ?>
 											</td>
+											<td>
 
+												<?php
+												if ($showlink->case_status == '1') {
+													echo '<button type="button" class="btn btn-success btn-sm" id="btn-' . @$showlink->id . '" onclick="javascript:DisabledLink(\'' . @$showlink->id . '\');" data-top="toptitle" data-placement="top" title="เปิด/ปิดการใช้งาน"><i class="fa fa-unlock-alt fa-fw" id="icon-' . @$showlink->id . '"></i> <span id="text-' . @$showlink->id . '"></span></button>';
+												} else {
+													echo '<button type="button" class="btn btn-danger btn-sm" id="btn-' . @$showlink->id . '" onclick="javascript:DisabledLink(\'' . @$showlink->id . '\');" data-top="toptitle" data-placement="top" title="เปิด/ปิดการใช้งาน"><i class="fa fa-lock fa-fw" id="icon-' . @$showlink->id . '"></i> <span id="text-' . @$showlink->id . '"></span></button>';
+												}
+												?>
+												<button class="btn btn-info btn-sm" data-toggle="modal" data-target="#edit_page" data-whatever="<?php echo @$showlink->id; ?>" data-top="toptitle" data-placement="top" title="แก้ไข"><i class="fa fa-edit fa-fw"></i></button>
+												<button type="button" class="btn btn-danger btn-sm" onclick="javascript:delect_link('<?php echo @$showlink->id; ?>');" data-top="toptitle" data-placement="top" title="ลบรายการ"><i class="fa fa-trash-alt fa-fw"></i></button>
+
+											</td>
 
 
 										</tr>

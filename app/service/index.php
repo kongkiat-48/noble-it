@@ -81,44 +81,80 @@ include_once 'procress/dataSave.php';
 
 <?php echo @$alert; ?>
 
-<div class="row">
-  <div class="col-xl-4 col-md-6 mb-4">
-    <div class="card border-left-primary shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-md font-weight-bold text-primary text-uppercase mb-1">จำนวนรายการแจ้งปัญหาเดือน <u><?php echo @month(); ?></u></div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "ID <> 'hidden' AND (date LIKE '%" . date("Y-m") . "%' )");
-                                                                echo @number_format($getall); ?></div>
+<?php if ($_SESSION['uclass'] == 1) { ?>
+  <div class="row">
+    <div class="col-xl-4 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-md font-weight-bold text-primary text-uppercase mb-1">จำนวนรายการแจ้งปัญหาเดือน <u><?php echo @month(); ?></u></div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "ID <> 'hidden' AND (date LIKE '%" . date("Y-m") . "%' ) AND user_key = '" . $_SESSION['ukey'] . "'");
+                                                                  echo @number_format($getall); ?></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
+            </div>
           </div>
-          <div class="col-auto">
-            <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-4 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-md font-weight-bold text-info text-uppercase mb-1">จำนวนรายการแจ้งปัญหาวันนี้</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "ID <> 'hidden' AND (date LIKE '%" . date("Y-m-d") . "%' ) AND user_key = '" . $_SESSION['ukey'] . "'");
+                                                                  echo @number_format($getall); ?></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+<?php } ?>
 
-  <div class="col-xl-4 col-md-6 mb-4">
-    <div class="card border-left-info shadow h-100 py-2">
-      <div class="card-body">
-        <div class="row no-gutters align-items-center">
-          <div class="col mr-2">
-            <div class="text-md font-weight-bold text-info text-uppercase mb-1">จำนวนรายการแจ้งปัญหาวันนี้</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "ID <> 'hidden' AND (date LIKE '%" . date("Y-m-d") . "%' )");
-                                                                echo @number_format($getall); ?></div>
-          </div>
-          <div class="col-auto">
-            <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-</div>
 <?php if ($_SESSION['uclass'] == 2 || $_SESSION['uclass'] == 3) { ?>
+  <div class="row">
+    <div class="col-xl-4 col-md-6 mb-4">
+      <div class="card border-left-primary shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-md font-weight-bold text-primary text-uppercase mb-1">จำนวนรายการแจ้งปัญหาเดือน <u><?php echo @month(); ?></u></div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "ID <> 'hidden' AND (date LIKE '%" . date("Y-m") . "%' ) AND se_id != '8' AND se_li_id != '154'");
+                                                                  echo @number_format($getall); ?></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar-alt fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-4 col-md-6 mb-4">
+      <div class="card border-left-info shadow h-100 py-2">
+        <div class="card-body">
+          <div class="row no-gutters align-items-center">
+            <div class="col mr-2">
+              <div class="text-md font-weight-bold text-info text-uppercase mb-1">จำนวนรายการแจ้งปัญหาวันนี้</div>
+              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "ID <> 'hidden' AND (date LIKE '%" . date("Y-m-d") . "%' ) AND se_id != '8' AND se_li_id != '154'");
+                                                                  echo @number_format($getall); ?></div>
+            </div>
+            <div class="col-auto">
+              <i class="fas fa-calendar-check fa-2x text-gray-300"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="row">
     <div class="col-xl-3 col-md-6 mb-4">
       <div class="card border-left-success shadow h-100 py-2">
@@ -126,7 +162,7 @@ include_once 'procress/dataSave.php';
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
               <div class="text-md font-weight-bold text-success text-uppercase mb-1">จำนวนรายการแจ้งปัญหาที่เสร็จแล้ว</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IN ('2e34609794290a770cb0349119d78d21','2376b33c92767c1437421a99bbc7164f') AND (date LIKE '%" . date("Y-m") . "%' )");
+              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IN ('2e34609794290a770cb0349119d78d21','2376b33c92767c1437421a99bbc7164f') AND (date LIKE '%" . date("Y-m") . "%' ) AND se_id != '8' AND se_li_id != '154'");
                                                                   echo @number_format($getall); ?></div>
             </div>
             <div class="col-auto">
@@ -143,7 +179,7 @@ include_once 'procress/dataSave.php';
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
               <div class="text-md font-weight-bold text-warning text-uppercase mb-1">จำนวนรายการแจ้งปัญหารอการแก้ไข</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getwait = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IS NULL");
+              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getwait = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IS NULL AND se_id != '8' AND se_li_id != '154'");
                                                                   echo @number_format($getwait); ?></div>
             </div>
             <div class="col-auto">
@@ -211,7 +247,7 @@ include_once 'procress/dataSave.php';
               <th>สถานะ : </th>
               <th>วันที่แจ้ง : </th>
               <th>เวลา : </th>
-              
+
               <th>ค่าใช้จ่าย : </th>
               <th>ดำเนินการ : </th>
               <th>ผู้ดำเนินการ : </th>
@@ -223,7 +259,8 @@ include_once 'procress/dataSave.php';
           <tbody>
             <?php
             $i = 0;
-            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "ID AND card_status NOT IN ('2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214','2376b33c92767c1437421a99bbc7164f') OR card_status IS NULL ORDER BY ticket DESC");
+            // $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status NOT IN ('2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214','2376b33c92767c1437421a99bbc7164f','wait_approve') OR card_status IS NULL AND approve_department = 'IT' ORDER BY ticket DESC");
+            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status NOT IN ('2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214','2376b33c92767c1437421a99bbc7164f','wait_approve') AND approve_department = 'IT' AND se_id != '8' AND se_li_id != '154' ORDER BY ticket DESC");
             while ($show_total = mysqli_fetch_object($get_total)) {
               $i++;
             ?>
@@ -232,29 +269,46 @@ include_once 'procress/dataSave.php';
                 <td><?php echo @$show_total->ticket; ?></td>
 
                 <!-- <td><?php echo @getemployee($show_total->user_key); ?></td> -->
-                <td><?php echo $show_total->se_namecall; ?></td>
                 <td>
-                  <?php 
-                    $count = $getdata->my_sql_show_rows($connect, "card_info", "asset_code = '".$show_total->se_asset."'");
-                    if($count >= '1'){
-                      echo '<a href="?p=view_repair&key='.@$show_total->se_asset.'" target="_blank" title="ตรวจสอบ">'.@$show_total->se_asset.'</a>';
-                    } else {
-                      echo $show_total->se_asset;
-                    }
+                  <?php
+                  $search = $getdata->my_sql_query($connect, NULL, "employee", "card_key ='" . $show_total->se_namecall . "'");
+                  if (COUNT($search) == 0) {
+                    $chkName = $show_total->se_namecall;
+                  } else {
+                    $chkName = getemployee($show_total->se_namecall);
+                  }
+
+                  echo $chkName;
+                  ?>
+                </td>
+                <td>
+                  <?php
+                  $count = $getdata->my_sql_show_rows($connect, "card_info", "asset_code = '" . $show_total->se_asset . "'");
+                  if ($count >= '1') {
+                    echo '<a href="?p=view_repair&key=' . @$show_total->se_asset . '" target="_blank" title="ตรวจสอบ">' . @$show_total->se_asset . '</a>';
+                  } else {
+                    echo $show_total->se_asset;
+                  }
                   ?>
                 </td>
                 <!-- <td><?php echo @getemployee_department($show_total->user_key); ?></td> -->
                 <td><?php echo @prefixbranch($show_total->se_location); ?></td>
 
 
-                
+
                 <td style="white-space: revert;">
                   <?php echo $show_total->se_other; ?>
                 </td>
                 <td class="text-center">
                   <?php
-                  if (@$show_total->card_status == NULL) {
+                  if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR')) {
                     echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                  } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
+                    echo '<span class="badge badge-info">รอการอนุมัติจากผู้บังคับบัญชา</span>';
+                  } else if ($show_total->card_status == NULL && $show_total->approve_department == 'HR') {
+                    echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
+                  } else if ($show_total->card_status == 'over_work') {
+                    echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
                   } else {
                     echo @cardStatus($show_total->card_status);
                   }
@@ -360,7 +414,7 @@ include_once 'procress/dataSave.php';
               <tbody>
                 <?php
                 $i = 0;
-                $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "user_key = '" . $_SESSION['ukey'] . "'ORDER BY ticket DESC");
+                $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "user_key = '" . $_SESSION['ukey'] . "' OR manager_approve = '" . $_SESSION['ukey'] . "' AND approve_department = 'IT' ORDER BY ticket DESC");
                 while ($show_total = mysqli_fetch_object($get_total)) {
                   $i++;
                 ?>
@@ -397,6 +451,11 @@ include_once 'procress/dataSave.php';
                     </td>
                     <td>
                       <a href="?p=case_all_service&key=<?php echo @$show_total->ticket; ?>" class="btn btn-sm btn-success" data-top="toptitle" data-placement="top" title="ตรวจสอบ"><span class="mdi mdi-timeline-text-outline"></span></a>
+                      <?php
+                      if ($show_total->card_status != 'fe8ae3ced9e7e738d78589bf6610c4da') {
+                        echo '<a href="#" data-toggle="modal" data-target="#off_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-success btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
+                      }
+                      ?>
                     </td>
 
                   </tr>
@@ -412,7 +471,6 @@ include_once 'procress/dataSave.php';
     </div>
 
 
-  </div>
   </div>
 
 <?php } ?>

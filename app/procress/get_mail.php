@@ -6,7 +6,8 @@ $mail->isSMTP();
 $mail->SMTPAuth = true;
 $mail->SMTPSecure = "tls"; // ใช้งานรูปแบบ TTS TLS
 $mail->Host = $getalert->alert_mail_server; // Domain mail
-$mail->Port = 587;  // Port mail 25 : 587
+// $mail->Port = 587;  // Port mail 25 : 587
+$mail->Port = 442;  // Port mail 25 : 587
 $mail->isHTML();
 $mail->CharSet = "utf-8"; // ตั้งเป็น UTF-8 เพื่อให้อ่านภาษาไทยได้
 $mail->Username = $getalert->alert_mail_user; // ใส่เมลล์

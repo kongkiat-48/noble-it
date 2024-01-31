@@ -21,6 +21,8 @@ $system_info = $getdata->my_sql_query($connect, null, 'system_info', null);
 date_default_timezone_set('Asia/Bangkok');
 
 //require("../core/online.core.php");
+$stmt = $connect->prepare("CALL checkWorkTime()");
+$stmt->execute();
 
 ?>
 <!DOCTYPE html>

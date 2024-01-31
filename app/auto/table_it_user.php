@@ -17,7 +17,7 @@ date_default_timezone_set('Asia/Bangkok');
 
 <?php
 $i = 0;
-$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "(card_status is null or card_status != '57995055c28df9e82476a54f852bd214') AND user_key = '" . $_SESSION['ukey'] . "'ORDER BY ticket DESC LIMIT 10");
+$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "(card_status is null or card_status != '57995055c28df9e82476a54f852bd214') AND user_key = '" . $_SESSION['ukey'] . "'ORDER BY ticket DESC LIMIT 30");
 while ($show_total = mysqli_fetch_object($get_total)) {
     $i++;
 ?>
@@ -28,8 +28,14 @@ while ($show_total = mysqli_fetch_object($get_total)) {
         <td><?php echo $show_total->time_start; ?></td>
         <td>
             <?php
-            if (@$show_total->card_status == NULL) {
+            if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR')) {
                 echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+            } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
+                echo '<span class="badge badge-info">รอการอนุมัติจากผู้บังคับบัญชา</span>';
+            } else if ($show_total->card_status == NULL && $show_total->approve_department == 'HR') {
+                echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
+            } else if ($show_total->card_status == 'over_work') {
+                echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
             } else {
                 echo @cardStatus($show_total->card_status);
             }
@@ -40,6 +46,8 @@ while ($show_total = mysqli_fetch_object($get_total)) {
         <td><?php
             if ($show_total->date_update != '0000-00-00') {
                 echo @dateConvertor($show_total->date_update);
+            } else if ($show_total->card_status == 'over_work') {
+                echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
             } else {
                 echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
             } ?>
