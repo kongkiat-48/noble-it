@@ -9,6 +9,7 @@ $card_detail = $getdata->my_sql_query($connect, NULL, "problem_list", "departmen
    </div>
 </div>
 
+
 <nav aria-label="breadcrumb" class="mt-3 mb-3">
    <ol class="breadcrumb breadcrumb-inverse">
       <li class="breadcrumb-item">
