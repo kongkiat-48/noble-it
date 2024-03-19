@@ -1,16 +1,48 @@
 <?php
 require_once 'procress/save_user.php';
 require_once 'procress/save_service_it.php';
-require_once 'auto/getalert.php';
+// require_once 'auto/getalert.php';
 echo @$alert;
 ?>
 <script>
-    setInterval(function() {
-        $('#get_sum_it').load('auto/sum_case_it.php');
-        $('#get_table_it').load('auto/table_it_user.php');
-        $('#list_approve').load('auto/list_approve.php');
+    function refreshData() {
+        $.ajax({
+            url: 'auto/sum_case_it.php',
+            success: function(data) {
+                $('#get_sum_it').html(data);
+            }
+        });
+        $.ajax({
+            url: 'auto/table_it_user.php',
+            success: function(data) {
+                $('#get_table_it').html(data);
+            }
+        });
+        $.ajax({
+            url: 'auto/list_approve.php',
+            success: function(data) {
+                $('#list_approve').html(data);
+            }
+        });
+        $.ajax({
+            url: 'auto/list_checkwork.php',
+            success: function(data) {
+                $('#list_checkwork').html(data);
+            }
+        });
+        $.ajax({
+            url: 'auto/list_cctv.php',
+            success: function(data) {
+                $('#list_cctv').html(data);
+            }
+        });
+    }
 
-    }, 1000) /* time in milliseconds (ie 2 seconds)*/
+    $(document).ready(function() {
+        refreshData(); // Call on document ready to load the data initially
+        var refreshInterval = 10000; // Adjust the time interval as needed.
+        setInterval(refreshData, refreshInterval);
+    });
 </script>
 
 <!-- Modal Case IT -->
@@ -210,12 +242,31 @@ echo @$alert;
         <form method="post" enctype="multipart/form-data" class="was-validated" id="waitsave2">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">เปลี่ยนแปลง</h5>
+                    <h5 class="modal-title">อนุมัติรายการ</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="approve-frm">
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="checkwork-frm" role="dialog" aria-labelledby="checkwork-frm" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form method="post" enctype="multipart/form-data" class="was-validated" id="waitsave2">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">อนุมัติรายการ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="checkwork-frm">
 
                 </div>
 
@@ -276,6 +327,18 @@ echo @$alert;
                         <li class="nav-item">
                             <a class="nav-link" id="approve-list-tab" data-toggle="tab" href="#approve-list" role="tab" aria-controls="approve-list" aria-selected="false">
                                 รายการอนุมัติ</a>
+                        </li>
+                    <?php } ?>
+
+                    <?php if ($_SESSION['uclass'] == 3) { ?>
+                        <li class="nav-item">
+                            <a class="nav-link" id="checkwork-list-tab" data-toggle="tab" href="#checkwork-list" role="tab" aria-controls="checkwork-list" aria-selected="false">
+                                รายการตรวจสอบงาน</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" id="cctv-list-tab" data-toggle="tab" href="#cctv-list" role="tab" aria-controls="cctv-list" aria-selected="false">
+                                รายการขอตรวจสอบ CCTV</a>
                         </li>
                     <?php } ?>
                 </ul>
@@ -364,6 +427,66 @@ echo @$alert;
                         </div>
                     </div>
 
+                    <div class="tab-pane fade" id="checkwork-list" role="tabpanel" aria-labelledby="checkwork-list-tab">
+                        <div class="mt-5">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="basic-data-table">
+                                        <table class="table nowrap text-center" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Case ID</th>
+                                                    <th>Ticket</th>
+                                                    <th>Date</th>
+                                                    <th>Time</th>
+                                                    <th>Status</th>
+                                                    <th>Date success</th>
+
+                                                    <th>จัดการ</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id="list_checkwork">
+
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="cctv-list" role="tabpanel" aria-labelledby="cctv-list-tab">
+                        <div class="mt-5">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="basic-data-table">
+                                        <table class="table nowrap text-center" style="width:100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Case ID</th>
+                                                    <th>Ticket</th>
+                                                    <th>Date</th>
+                                                    <th>Time</th>
+                                                    <th>Status</th>
+                                                    <th>Date success</th>
+
+                                                    <th>จัดการ</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody id="list_cctv">
+
+                                            </tbody>
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab">
                         <div class="mt-5">
                             <div class="responsive-data-table-it">
@@ -439,8 +562,20 @@ echo @$alert;
                                                     <?php
                                                     if (@$show_total->card_status == NULL) {
                                                         echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                                                    } else if (@$show_total->card_status == 'over_work') {
+                                                        echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
                                                     } else {
-                                                        echo @cardStatus($show_total->card_status);
+                                                        if ($show_total->card_status == '2e34609794290a770cb0349119d78d21') {
+                                                            echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
+                                                        } else if ($show_total->card_status == 'approve_workcheck') {
+                                                            echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
+                                                        } else {
+                                                            if ($show_total->card_status == 'wait_approve') {
+                                                                echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                                                            } else {
+                                                                echo @cardStatus($show_total->card_status);
+                                                            }
+                                                        }
                                                     }
 
                                                     ?>

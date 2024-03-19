@@ -17,7 +17,7 @@ date_default_timezone_set('Asia/Bangkok');
 
 <?php
 $i = 0;
-$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status = 'wait_approve' AND manager_approve = '" . $_SESSION['ukey'] . "'ORDER BY ticket DESC LIMIT 10");
+$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status IN ('wait_approve','approve_workcheck') AND manager_approve = '" . $_SESSION['ukey'] . "'ORDER BY ticket DESC LIMIT 10");
 while ($show_total = mysqli_fetch_object($get_total)) {
     $i++;
 ?>
@@ -30,8 +30,10 @@ while ($show_total = mysqli_fetch_object($get_total)) {
             <?php
             if (@$show_total->card_status == NULL) {
                 echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
-            } else if ($show_total->card_status == 'wait_approve'){
-                echo '<span class="badge badge-info">รอการอนุมัติจากผู้บังคับบัญชา</span>';
+            } else if ($show_total->card_status == 'wait_approve') {
+                echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+            } else if ($show_total->card_status == 'approve_workcheck') {
+                echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
             } else {
                 echo @cardStatus($show_total->card_status);
             }
@@ -52,7 +54,7 @@ while ($show_total = mysqli_fetch_object($get_total)) {
             // echo '
             //     <a href="?p=case_all_service&key=' . @$show_total->ticket . '" target="_blank" class="btn btn-sm btn-success" data-top="toptitle" data-placement="top" title="อนุมัติ"><i class="fas fa-user-check"></i></a>';
 
-                echo '<a href="#" data-toggle="modal" data-target="#approve-frm" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
+            echo '<a href="#" data-toggle="modal" data-target="#approve-frm" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
             ?>
         </td>
 

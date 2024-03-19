@@ -165,7 +165,7 @@ require_once 'procress/save_service_it.php';
                         <tbody>
                             <?php
                             $i = 0;
-                            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "user_key = '" . $_SESSION['ukey'] . "' OR (approve_department = 'HR' OR se_id IN ('13','16')) AND card_status NOT IN ('wait_approve') ORDER BY ticket DESC");
+                            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "approve_department = 'HR' OR se_id IN ('13','16') AND card_status NOT IN ('wait_approve') ORDER BY ticket DESC");
                             while ($show_total = mysqli_fetch_object($get_total)) {
                                 $i++;
                             ?>
@@ -187,9 +187,11 @@ require_once 'procress/save_service_it.php';
                                         if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR')) {
                                             echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
                                         } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
-                                            echo '<span class="badge badge-info">รอการอนุมัติจากผู้บังคับบัญชา</span>';
+                                            echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
                                         } else if ($show_total->card_status == NULL && $show_total->approve_department == 'HR') {
                                             echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
+                                        } else if ($show_total->card_status == 'approve_workcheck') {
+                                            echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
                                         } else {
                                             echo @cardStatus($show_total->card_status);
                                         }
@@ -207,8 +209,9 @@ require_once 'procress/save_service_it.php';
                                     <td>
                                         <?php
                                         echo '<a href="#" data-toggle="modal" data-target="#show_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-info" data-top="toptitle" data-placement="top" title="ตรวจสอบ"><i class="fa fa-search"></i></a>&nbsp';
-                                        if($show_total->approve_department == 'HR') {
-                                            echo '<a href="#" data-toggle="modal" data-target="#approve-hr" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
+                                        if ($show_total->approve_department == 'HR' || $show_total->card_status == 'approve_workcheck') {
+                                            // echo '<a href="#" data-toggle="modal" data-target="#approve-hr" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
+                                            echo '<a href="#" data-toggle="modal" data-target="#off_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-success btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
                                         }
                                         ?>
                                         <a href="?p=case_all_service&key=<?php echo @$show_total->ticket; ?>" class="btn btn-sm btn-success" data-top="toptitle" data-placement="top" title="ตรวจสอบ"><span class="mdi mdi-timeline-text-outline"></span></a>

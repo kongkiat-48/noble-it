@@ -166,7 +166,7 @@ include_once 'service/procress/dataSave.php';
                     <tbody>
                         <?php
                         $i = 0;
-                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id = '154' ORDER BY CONVERT(ID, SIGNED) DESC,ID DESC,date ASC");
+                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id = '154' AND card_status != 'wait_approve' ORDER BY CONVERT(ID, SIGNED) DESC,ID DESC,date ASC");
                         while ($show_total = mysqli_fetch_object($get_total)) {
                             $i++;
                         ?>
@@ -210,13 +210,23 @@ include_once 'service/procress/dataSave.php';
                                     if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR')) {
                                         echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
                                     } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
-                                        echo '<span class="badge badge-info">รอการอนุมัติจากผู้บังคับบัญชา</span>';
+                                        echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
                                     } else if ($show_total->card_status == NULL && $show_total->approve_department == 'HR') {
                                         echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
                                     } else if ($show_total->card_status == 'over_work') {
                                         echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
                                     } else {
-                                        echo @cardStatus($show_total->card_status);
+                                        if ($show_total->card_status == '2e34609794290a770cb0349119d78d21') {
+                                            echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
+                                        } else if ($show_total->card_status == 'approve_workcheck') {
+                                            echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
+                                        } else {
+                                            if ($show_total->card_status == 'wait_approve') {
+                                                echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                                            } else {
+                                                echo @cardStatus($show_total->card_status);
+                                            }
+                                        }
                                     }
 
                                     ?>

@@ -162,7 +162,7 @@ include_once 'procress/dataSave.php';
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
               <div class="text-md font-weight-bold text-success text-uppercase mb-1">จำนวนรายการแจ้งปัญหาที่เสร็จแล้ว</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IN ('2e34609794290a770cb0349119d78d21','2376b33c92767c1437421a99bbc7164f') AND (date LIKE '%" . date("Y-m") . "%' ) AND se_id != '8' AND se_li_id != '154'");
+              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IN ('2e34609794290a770cb0349119d78d21','2376b33c92767c1437421a99bbc7164f','fe8ae3ced9e7e738d78589bf6610c4da') AND (date LIKE '%" . date("Y-m") . "%' ) AND se_id != '8' AND se_li_id != '154'");
                                                                   echo @number_format($getall); ?></div>
             </div>
             <div class="col-auto">
@@ -260,7 +260,7 @@ include_once 'procress/dataSave.php';
             <?php
             $i = 0;
             // $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status NOT IN ('2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214','2376b33c92767c1437421a99bbc7164f','wait_approve') OR card_status IS NULL AND approve_department = 'IT' ORDER BY ticket DESC");
-            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status NOT IN ('2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214','2376b33c92767c1437421a99bbc7164f','wait_approve') AND approve_department = 'IT' AND se_id != '8' AND se_li_id != '154' ORDER BY ticket DESC");
+            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status NOT IN ('2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214','2376b33c92767c1437421a99bbc7164f','wait_approve','approve_workcheck','fe8ae3ced9e7e738d78589bf6610c4da') AND approve_department = 'IT' AND se_id != '8' AND se_li_id != '154' ORDER BY ticket DESC");
             while ($show_total = mysqli_fetch_object($get_total)) {
               $i++;
             ?>
@@ -304,7 +304,7 @@ include_once 'procress/dataSave.php';
                   if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR')) {
                     echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
                   } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
-                    echo '<span class="badge badge-info">รอการอนุมัติจากผู้บังคับบัญชา</span>';
+                    echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
                   } else if ($show_total->card_status == NULL && $show_total->approve_department == 'HR') {
                     echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
                   } else if ($show_total->card_status == 'over_work') {
@@ -436,7 +436,13 @@ include_once 'procress/dataSave.php';
                       if (@$show_total->card_status == NULL) {
                         echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
                       } else {
-                        echo @cardStatus($show_total->card_status);
+                        if ($show_total->card_status == '2e34609794290a770cb0349119d78d21') {
+                          echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
+                        } else if ($show_total->card_status == 'approve_workcheck') {
+                          echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
+                        } else {
+                          echo @cardStatus($show_total->card_status);
+                        }
                       }
 
                       ?>
@@ -452,8 +458,12 @@ include_once 'procress/dataSave.php';
                     <td>
                       <a href="?p=case_all_service&key=<?php echo @$show_total->ticket; ?>" class="btn btn-sm btn-success" data-top="toptitle" data-placement="top" title="ตรวจสอบ"><span class="mdi mdi-timeline-text-outline"></span></a>
                       <?php
-                      if ($show_total->card_status != 'fe8ae3ced9e7e738d78589bf6610c4da') {
+                      if ($show_total->card_status == '2e34609794290a770cb0349119d78d21') {
+                        echo '';
+                      } else if ($show_total->card_status == 'approve_workcheck') {
                         echo '<a href="#" data-toggle="modal" data-target="#off_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-success btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
+                      } else {
+                        echo "";
                       }
                       ?>
                     </td>

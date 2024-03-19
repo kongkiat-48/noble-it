@@ -17,7 +17,7 @@ date_default_timezone_set('Asia/Bangkok');
 
 <?php
 $i = 0;
-$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "(card_status is null or card_status != '57995055c28df9e82476a54f852bd214') AND user_key = '" . $_SESSION['ukey'] . "'ORDER BY ticket DESC LIMIT 30");
+$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id = '154' AND card_status = 'wait_approve' ORDER BY ticket DESC LIMIT 10");
 while ($show_total = mysqli_fetch_object($get_total)) {
     $i++;
 ?>
@@ -28,27 +28,12 @@ while ($show_total = mysqli_fetch_object($get_total)) {
         <td><?php echo $show_total->time_start; ?></td>
         <td>
             <?php
-            if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR')) {
+            if (@$show_total->card_status == NULL) {
                 echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
-            } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
-                echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
-            } else if ($show_total->card_status == NULL && $show_total->approve_department == 'HR') {
-                echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
-            } else if ($show_total->card_status == 'over_work') {
-                echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
+            } else if ($show_total->card_status == '2e34609794290a770cb0349119d78d21') {
+                echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
             } else {
-                if($show_total->card_status == '2e34609794290a770cb0349119d78d21') {
-                    echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
-                } else if ($show_total->card_status == 'approve_workcheck') {
-                    echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
-                  }else {
-                    if($show_total->card_status == 'wait_approve') {
-                        echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
-                    } else {
-                        echo @cardStatus($show_total->card_status);
-                    }
-                }
-                
+                echo @cardStatus($show_total->card_status);
             }
 
             ?>
@@ -57,8 +42,6 @@ while ($show_total = mysqli_fetch_object($get_total)) {
         <td><?php
             if ($show_total->date_update != '0000-00-00') {
                 echo @dateConvertor($show_total->date_update);
-            } else if ($show_total->card_status == 'over_work') {
-                echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
             } else {
                 echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
             } ?>
@@ -66,8 +49,15 @@ while ($show_total = mysqli_fetch_object($get_total)) {
 
         <td>
             <?php
-            echo '
-                <a href="?p=case_all_service&key=' . @$show_total->ticket . '" target="_blank" class="btn btn-sm btn-success" data-top="toptitle" data-placement="top" title="ตรวจสอบ"><i class="fas fa-list"></i></a>';
+            // echo '
+            //     <a href="?p=case_all_service&key=' . @$show_total->ticket . '" target="_blank" class="btn btn-sm btn-success" data-top="toptitle" data-placement="top" title="อนุมัติ"><i class="fas fa-user-check"></i></a>';
+
+            // echo '<a href="?p=viewcctv" class="btn btn-sm btn-warning btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
+
+            // echo '&nbsp<a href="?p=case_all_service&key=' . @$show_total->ticket . '" target="_blank" class="btn btn-sm btn-success" data-top="toptitle" data-placement="top" title="ตรวจสอบ"><i class="fas fa-list"></i></a>';
+
+            echo '<a href="#" data-toggle="modal" data-target="#approve-frm" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
+
             ?>
         </td>
 

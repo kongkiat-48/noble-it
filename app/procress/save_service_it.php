@@ -246,9 +246,9 @@ if (isset($_POST['save_approve'])) {
         $getdata->my_sql_insert(
             $connect,
             "problem_comment",
-            "card_status='" . htmlspecialchars($_POST['off_case_status']) . "',
+            "card_status='" . htmlspecialchars($getFlag) . "',
       admin_update='" . $name_key . "',
-      comment='" . htmlspecialchars($_POST['comment']) . "',
+      comment='" . htmlspecialchars($_POST['comment']) . " - อนุมัติจากผู้บังคับบัญชา',
       date ='" . date("Y-m-d H:i:s") . "',
       ticket='" . htmlspecialchars($_POST['card_key']) . "'"
         );
@@ -257,7 +257,7 @@ if (isset($_POST['save_approve'])) {
         // ส่งข้อมูลเข้าไลน์
         $ticket = $_POST['ticket'];
         $name_admin = $_POST['admin'];
-        if($_POST['approve_status'] == 'Y') {
+        if ($_POST['approve_status'] == 'Y') {
             $status = 'อนุมัติดำเนินงานแจ้งซ่อม';
         } else {
             $status = @cardStatus_for_line($_POST['approve_status']);
@@ -276,7 +276,65 @@ if (isset($_POST['save_approve'])) {
          ------------------------
          ผู้ดำเนินการ : $name_admin
          สถานะ :  $status 
-         ผู้แจ้ง : ".@getemployee($namecall)."
+         ผู้แจ้ง : " . @getemployee($namecall) . "
+         สาขา : $location
+         รายละเอียด : $detail
+         ------------------------
+         วันที่: {$date_send}
+         เวลา: {$time_send}
+         ";
+
+        lineNotify($line_text, $line_token); // เรียกใช้ Functions line
+
+        $alert = $success;
+    }
+}
+
+if (isset($_POST['save_checkwork'])) {
+    if (!empty($_POST['checkwork_status'])) {
+        $getFlag = $_POST['checkwork_status'] == "Y" ? "fe8ae3ced9e7e738d78589bf6610c4da" : $_POST['checkwork_status'];
+        if ($_POST['checkwork_status'] == 'Y') {
+            $status = 'ผ่านการตรวจสอบจาก Support Manager';
+        } else {
+            $status = @cardStatus_for_line($_POST['checkwork_status']);
+        }
+        $getdata->my_sql_update(
+            $connect,
+            "problem_list",
+            "card_status='" . $getFlag . "'", //เพิ่ม เวลา
+            "ticket='" . htmlspecialchars($_POST['card_key']) . "'"
+        );
+
+        $getdata->my_sql_insert(
+            $connect,
+            "problem_comment",
+            "card_status='" . htmlspecialchars($getFlag) . "',
+      admin_update='" . $name_key . "',
+      comment='" . htmlspecialchars($_POST['comment']) . "' - '" . $status . "',
+      date ='" . date("Y-m-d H:i:s") . "',
+      ticket='" . htmlspecialchars($_POST['card_key']) . "'"
+        );
+
+
+        // ส่งข้อมูลเข้าไลน์
+        $ticket = $_POST['ticket'];
+        $name_admin = $_POST['admin'];
+
+        // $status = $_POST['off_case_status'];
+        $date_send = date('d/m/Y');
+        $time_send = date("H:i");
+        $namecall = $_POST['namecall'];
+        $location = $_POST['location'];
+        $detail = $_POST['detail'];
+        $line_token = $getalert->alert_line_token; // Token
+        $line_text = "
+         /*** ผ่านการตรวจสอบจาก Support Manager ***/
+         ------------------------
+         Ticket : $ticket
+         ------------------------
+         ผู้ดำเนินการ : $name_admin
+         สถานะ :  $status 
+         ผู้แจ้ง : " . @getemployee($namecall) . "
          สาขา : $location
          รายละเอียด : $detail
          ------------------------
@@ -307,9 +365,9 @@ if (isset($_POST['save_approve_hr'])) {
         $getdata->my_sql_insert(
             $connect,
             "problem_comment",
-            "card_status='" . htmlspecialchars($_POST['off_case_status']) . "',
+            "card_status='" . htmlspecialchars($getFlag) . "',
       admin_update='" . $name_key . "',
-      comment='" . htmlspecialchars($_POST['comment']) . "',
+      comment='" . htmlspecialchars($_POST['comment']) . " - อนุมัติจาก HR',
       date ='" . date("Y-m-d H:i:s") . "',
       ticket='" . htmlspecialchars($_POST['card_key']) . "'"
         );
@@ -332,7 +390,7 @@ if (isset($_POST['save_approve_hr'])) {
          ------------------------
          ผู้ดำเนินการ : $name_admin
          สถานะ :  " . @cardStatus_for_line($status) . " 
-         ผู้แจ้ง : ".@getemployee($namecall)."
+         ผู้แจ้ง : " . @getemployee($namecall) . "
          สาขา : $location
          รายละเอียด : $detail
          ------------------------
