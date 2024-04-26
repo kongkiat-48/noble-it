@@ -128,8 +128,9 @@ Link : " . @urllink() . "
 ";
 
             lineNotify($line_text, $line_token); // เรียกใช้ Functions line
-            require_once 'get_mail.php';
             //echo "<META HTTP-EQUIV='Refresh' CONTENT = '1; URL='" . $SERVER_NAME . "'>";
+            require_once 'get_mail.php';
+            $alert = $success;
         } else {
             $alert = $warning;
             //echo "<META HTTP-EQUIV='Refresh' CONTENT = '2; URL='" . $SERVER_NAME . "'>";
@@ -292,25 +293,30 @@ if (isset($_POST['save_approve'])) {
 
 if (isset($_POST['save_checkwork'])) {
     if (!empty($_POST['checkwork_status'])) {
-        $getFlag = $_POST['checkwork_status'] == "Y" ? "fe8ae3ced9e7e738d78589bf6610c4da" : $_POST['checkwork_status'];
+        // $getFlag = $_POST['checkwork_status'] == "Y" ? "fe8ae3ced9e7e738d78589bf6610c4da" : 'reject';
+
         if ($_POST['checkwork_status'] == 'Y') {
+            $getFlag = "fe8ae3ced9e7e738d78589bf6610c4da";
             $status = 'ผ่านการตรวจสอบจาก Support Manager';
+            $detail = $_POST['comment'] . ' - ' . $status;
         } else {
-            $status = @cardStatus_for_line($_POST['checkwork_status']);
+            $getFlag = 'reject';
+            $status = 'ไม่ผ่านการตรวจสอบจาก Support Manager';
+            $detail = $_POST['comment'] . ' - ' . $status;
         }
         $getdata->my_sql_update(
             $connect,
             "problem_list",
-            "card_status='" . $getFlag . "'", //เพิ่ม เวลา
+            "card_status='" . $getFlag . "'",
             "ticket='" . htmlspecialchars($_POST['card_key']) . "'"
         );
 
         $getdata->my_sql_insert(
             $connect,
             "problem_comment",
-            "card_status='" . htmlspecialchars($getFlag) . "',
+            "card_status='" . $getFlag . "',
       admin_update='" . $name_key . "',
-      comment='" . htmlspecialchars($_POST['comment']) . "' - '" . $status . "',
+      comment='" . $detail . "',
       date ='" . date("Y-m-d H:i:s") . "',
       ticket='" . htmlspecialchars($_POST['card_key']) . "'"
         );
@@ -328,7 +334,7 @@ if (isset($_POST['save_checkwork'])) {
         $detail = $_POST['detail'];
         $line_token = $getalert->alert_line_token; // Token
         $line_text = "
-         /*** ผ่านการตรวจสอบจาก Support Manager ***/
+         /*** ".$status." ***/
          ------------------------
          Ticket : $ticket
          ------------------------

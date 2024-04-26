@@ -24,7 +24,7 @@ $get_admin = $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $_S
                 <option value="" selected>--- เลือกข้อมูล ---</option>
 
                 <option value="Y">ผ่าน</option>
-                <option value="57995055c28df9e82476a54f852bd214">ไม่ผ่าน</option>
+                <option value="reject">ไม่ผ่าน</option>
 
             </select>
             <div class="invalid-feedback">
@@ -56,7 +56,7 @@ $get_admin = $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $_S
         <span class="ladda-spinner"></span>
     </button>
 </div>
-<input type="text" name="card_key" id="card_key" hidden value="<?php echo @htmlspecialchars($_GET['key']); ?>">
+<input type="text" name="card_key" id="card_key"  value="<?php echo @htmlspecialchars($_GET['key']); ?>">
 <input type="text" name="name_user" id="name_user" hidden value="<?php echo @getemployee($chk_case->user_key); ?>">
 <input type="text" name="admin" hidden value="<?php echo @getemployee($get_admin->user_key); ?>">
 <input type="text" name="namecall" hidden value="<?php echo $chk_case->se_namecall; ?>">

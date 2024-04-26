@@ -309,6 +309,8 @@ include_once 'procress/dataSave.php';
                     echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
                   } else if ($show_total->card_status == 'over_work') {
                     echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
+                  } else if ($show_total->card_status == 'reject') {
+                    echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
                   } else {
                     echo @cardStatus($show_total->card_status);
                   }
@@ -440,6 +442,8 @@ include_once 'procress/dataSave.php';
                           echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
                         } else if ($show_total->card_status == 'approve_workcheck') {
                           echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
+                        } else if ($show_total->card_status == 'reject') {
+                          echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
                         } else {
                           echo @cardStatus($show_total->card_status);
                         }

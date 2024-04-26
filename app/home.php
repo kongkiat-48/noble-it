@@ -564,6 +564,8 @@ echo @$alert;
                                                         echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
                                                     } else if (@$show_total->card_status == 'over_work') {
                                                         echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
+                                                    }else if ($show_total->card_status == 'reject') {
+                                                        echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
                                                     } else {
                                                         if ($show_total->card_status == '2e34609794290a770cb0349119d78d21') {
                                                             echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';

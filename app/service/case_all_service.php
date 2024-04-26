@@ -52,17 +52,48 @@ $card_detail = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='"
           while ($showcard_status = mysqli_fetch_object($getcard_status)) {
           ?>
             <tr style="font-weight:bold;">
-            <!-- <td><?php echo $showcard_status->ID ?></td> -->
+              <!-- <td><?php echo $showcard_status->ID ?></td> -->
               <!-- <!-- <td align="center"><?php echo @dateTimeConvertor($showcard_status->date); ?></td>dateTimeConvertor -->
               <td align="center"><?php echo @dateTimeConvertor($showcard_status->date); ?></td>
-              <td align="center"><?php echo $showcard_status->card_status != null ? @cardStatus($showcard_status->card_status) : '<span class="badge badge-warning" style="color:#FFF;">สถานะขออนุมัติ</span>'; ?></td>
+              <!-- <td align="center"><?php echo $showcard_status->card_status != null ? @cardStatus($showcard_status->card_status) : '<span class="badge badge-warning" style="color:#FFF;">สถานะขออนุมัติ</span>'; ?></td> -->
+              <td>
+                <?php
+                if (@$showcard_status->card_status == NULL && ($showcard_status->approve_department == 'IT' ||  $showcard_status->approve_department != 'HR')) {
+                  echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                } else if ($showcard_status->card_status == 'wait_approve' && $showcard_status->approve_department == 'IT') {
+                  echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                } else if ($showcard_status->card_status == NULL && $showcard_status->approve_department == 'HR') {
+                  echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
+                } else if ($showcard_status->card_status == 'over_work') {
+                  echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
+                } else if ($showcard_status->card_status == 'reject') {
+                  echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
+                } else {
+                  if ($showcard_status->card_status == 'approve_workcheck') {
+                    echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
+                  } else {
+                    if ($showcard_status->card_status == 'wait_approve') {
+                      echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                    } else {
+                      echo @cardStatus($showcard_status->card_status);
+                    }
+                  }
+                }
+
+                ?>
+              </td>
+
               <td style="text-align: center;">
                 <?php
                 if (@$showcard_status->comment != NULL) {
                   # code...
                   echo @$showcard_status->comment;
                 } else {
-                  echo '<strong><font color="#E81600">ไม่มีข้อมูล</font></strong>';
+                  if ($showcard_status->card_status == '2e34609794290a770cb0349119d78d21') {
+                    echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
+                  } else {
+                    echo '<strong><font color="#E81600">ไม่มีข้อมูล</font></strong>';
+                  }
                 }
                 ?>
               </td>
