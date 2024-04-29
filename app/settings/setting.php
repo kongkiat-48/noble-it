@@ -51,6 +51,7 @@ if (@$_SESSION['uclass'] == 3) {
       <a href="?p=administrator_menus" class="btn btn-warning mt-1"><i class="fa fa-sitemap fa-fw fa-6x"></i><br><br>จัดการเมนู</a>
       <a href="?p=administrator_cases" class="btn btn-success mt-1"><i class="fa fa-bezier-curve fa-fw fa-6x"></i><br><br>ตรวจสอบหน้าระบบ</a>
       <a href="?p=setting_app" class="btn btn-info mt-1"><i class="far fa-window-maximize fa-fw fa-6x"></i><br /><br />ตั้งค่าระบบ</a>
+      <a href="?p=setting_approve" class="btn btn-primary mt-1"><i class="fas fa-user-friends fa-fw fa-6x"></i><br><br>จัดการสิทธิ์อนุมัติ (เจ้าหน้าที่)</a>
       <a href="?p=administrator_log" class="btn btn-danger mt-1"><i class="fa fa-user-clock fa-fw fa-6x"></i><br><br>ประวัติใช้งานต่าง ๆ </a>
       <a href="?p=setting_backup" class="btn btn-danger mt-1"><i class="fa fa-database fa-fw fa-6x"></i><br><br>สำรองฐานข้อมูล</a>
 

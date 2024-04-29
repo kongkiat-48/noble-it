@@ -62,6 +62,8 @@ $get_admin = $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $_S
 <input type="text" name="namecall" hidden value="<?php echo $chk_case->se_namecall; ?>">
 <input type="text" name="location" hidden value="<?php echo @prefixbranch($chk_case->se_location); ?>">
 <input type="text" name="detail" hidden value="<?php echo $chk_case->se_other; ?>">
+<input type="text" name="se_id" hidden  value="<?php echo $chk_case->se_id; ?>">
+<input type="text" name="se_li_id" hidden   value="<?php echo $chk_case->se_li_id; ?>">
 <?php if ($chk_case->se_after != NULL) { ?>
     <input type="text" name="pic_log" value="<?php echo $chk_case->se_after; ?>">
 <?php } ?>

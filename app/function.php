@@ -200,6 +200,10 @@ switch (htmlspecialchars($_GET['type'])) {
 		$getdata->my_sql_update($connect, "list", "case_status = '2'", "id='" . htmlspecialchars($_GET['key']) . "'");
 		echo '<script>window.location="index.php?p=administrator_cases";</script>';
 		break;
+	case "delete_admin_approve":
+		$getdata->my_sql_update($connect, "list_admin_approve", "deleted = '1'", "id='" . htmlspecialchars($_GET['key']) . "'");
+		echo '<script>window.location="index.php?p=setting_approve";</script>';
+		break;
 	case "delete_employee":
 		$getdata->my_sql_update($connect, "employee", "em_status = '0'", "card_key='" . htmlspecialchars($_GET['key']) . "'");
 		$getdata->my_sql_update($connect, "user", "user_status = '0'", "user_key='" . htmlspecialchars($_GET['key']) . "'");

@@ -74,6 +74,8 @@ $card_detail = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='"
                   } else {
                     if ($showcard_status->card_status == 'wait_approve') {
                       echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                    } else if ($showcard_status->card_status == 'wait_checkwork') {
+                      echo '<span class="badge badge-primary">รอตรวจสอบงานเสร็จจากผู้แจ้ง</span>';
                     } else {
                       echo @cardStatus($showcard_status->card_status);
                     }
@@ -119,7 +121,7 @@ $card_detail = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='"
 
 
   <div class="card-footer text-center">
-    <a href="#" class="btn btn-xs btn-outline-danger" onclick="window.close();"><i class="fa fa-reply"></i> กลับ</a>
+    <a href="#" class="btn btn-xs btn-outline-danger" onclick="history.back();"><i class="fa fa-reply"></i> กลับ</a>
   </div>
   <hr class="sidebar-divider d-none d-block">
   <?php

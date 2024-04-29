@@ -37,7 +37,6 @@ echo @$alert;
             }
         });
     }
-
     $(document).ready(function() {
         refreshData(); // Call on document ready to load the data initially
         var refreshInterval = 10000; // Adjust the time interval as needed.
@@ -256,6 +255,25 @@ echo @$alert;
     </div>
 </div>
 
+<div class="modal fade" id="approve-frm-cctv" role="dialog" aria-labelledby="approve-frm-cctv" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form method="post" enctype="multipart/form-data" class="was-validated" id="waitsave2">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">อนุมัติรายการ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="approve-frm-cctv">
+
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
 <div class="modal fade" id="checkwork-frm" role="dialog" aria-labelledby="checkwork-frm" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <form method="post" enctype="multipart/form-data" class="was-validated" id="waitsave2">
@@ -270,6 +288,32 @@ echo @$alert;
 
                 </div>
 
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<div class="modal fade" id="check_work_user" role="dialog" aria-labelledby="check_work_user" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate id="waitsave">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">ดำเนินการ</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="checkWorkUser">
+
+                </div>
+                <div class="modal-footer">
+
+                    <button class="ladda-button btn btn-primary btn-square btn-ladda bg-info" type="submit" name="save_checkwork_user" data-style="expand-left">
+                        <span class="fas fa-save"> บันทึก</span>
+                        <span class="ladda-spinner"></span>
+                    </button>
+                </div>
             </div>
         </form>
     </div>
@@ -330,17 +374,32 @@ echo @$alert;
                         </li>
                     <?php } ?>
 
-                    <?php if ($_SESSION['uclass'] == 3) { ?>
-                        <li class="nav-item">
-                            <a class="nav-link" id="checkwork-list-tab" data-toggle="tab" href="#checkwork-list" role="tab" aria-controls="checkwork-list" aria-selected="false">
-                                รายการตรวจสอบงาน</a>
-                        </li>
+                    <?php
+                    $get_list_approve = $getdata->my_sql_query($connect, NULL, "list_admin_approve", "user_key = '" . $userdata->user_key . "' AND deleted = '0'");
 
-                        <li class="nav-item">
+                    if ($get_list_approve->approve_menu == 'approve_all') {
+                        echo '<li class="nav-item">
+                            <a class="nav-link" id="checkwork-list-tab" data-toggle="tab" href="#checkwork-list" role="tab" aria-controls="checkwork-list" aria-selected="false">
+                                รายการตรวจสอบงาน IT</a>
+                        </li> <li class="nav-item">
+                        <a class="nav-link" id="cctv-list-tab" data-toggle="tab" href="#cctv-list" role="tab" aria-controls="cctv-list" aria-selected="false">
+                            รายการขอตรวจสอบ CCTV</a>
+                    </li>';
+                    } else if ($get_list_approve->approve_menu == 'approve_cctv') {
+                        echo '<li class="nav-item">
                             <a class="nav-link" id="cctv-list-tab" data-toggle="tab" href="#cctv-list" role="tab" aria-controls="cctv-list" aria-selected="false">
                                 รายการขอตรวจสอบ CCTV</a>
-                        </li>
-                    <?php } ?>
+                        </li>';
+                    } else if ($get_list_approve->approve_menu == 'approve_it') {
+                        echo '<li class="nav-item">
+                            <a class="nav-link" id="checkwork-list-tab" data-toggle="tab" href="#checkwork-list" role="tab" aria-controls="checkwork-list" aria-selected="false">
+                                รายการตรวจสอบงาน IT</a>
+                        </li>';
+                    } else {
+                        echo '';
+                    }
+
+                    ?>
                 </ul>
                 <hr>
                 <div class="tab-content px-3 px-xl-5" id="myTabContent">
@@ -560,20 +619,28 @@ echo @$alert;
 
                                                 <td class="text-center">
                                                     <?php
-                                                    if (@$show_total->card_status == NULL) {
+                                                    if ($show_total->se_id == '8' && $show_total->se_li_id == '154' && $show_total->manager_approve_status == 'Y' && $show_total->card_status == NULL) {
+                                                        echo '<span class="badge badge-info">รอ Support Manager อนุมัติ</span>';
+                                                    } else if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR') || $show_total->card_status == 'work_cctv') {
                                                         echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
-                                                    } else if (@$show_total->card_status == 'over_work') {
+                                                    } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
+                                                        echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                                                    } else if ($show_total->card_status == NULL && $show_total->approve_department == 'HR') {
+                                                        echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
+                                                    } else if ($show_total->card_status == 'over_work') {
                                                         echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
-                                                    }else if ($show_total->card_status == 'reject') {
+                                                    } else if ($show_total->card_status == 'reject') {
                                                         echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
                                                     } else {
-                                                        if ($show_total->card_status == '2e34609794290a770cb0349119d78d21') {
+                                                        if (in_array($show_total->card_status, ['2e34609794290a770cb0349119d78d21', 'fe8ae3ced9e7e738d78589bf6610c4da']) && $show_total->work_flag != 'work_success') {
                                                             echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
                                                         } else if ($show_total->card_status == 'approve_workcheck') {
                                                             echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
                                                         } else {
                                                             if ($show_total->card_status == 'wait_approve') {
                                                                 echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                                                            } else if ($show_total->card_status == 'wait_checkwork') {
+                                                                echo '<span class="badge badge-primary">รอตรวจสอบงานเสร็จจากผู้แจ้ง</span>';
                                                             } else {
                                                                 echo @cardStatus($show_total->card_status);
                                                             }
@@ -607,8 +674,14 @@ echo @$alert;
                                                 </td>
                                                 <td>
                                                     <?php
-                                                    if (@$show_total->admin_update == NULL) {
+                                                    if ($show_total->card_status == 'wait_checkwork') {
+                                                        echo '<span class="badge badge-primary">รอตรวจสอบงานเสร็จจากผู้แจ้ง</span>';
+                                                    }else if (@$show_total->admin_update == NULL && $show_total->card_status != "57995055c28df9e82476a54f852bd214") {
                                                         echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                                                    } else if ($show_total->card_status == "57995055c28df9e82476a54f852bd214") {
+                                                        echo @cardStatus($show_total->card_status);
+                                                    } else if ($show_total->se_id == '8' && $show_total->se_li_id == '154' && $show_total->manager_approve_status == 'Y' && $show_total->work_flag != 'work_success') {
+                                                        echo '<span class="badge badge-info">รอ Support Manager อนุมัติ</span>';
                                                     } else {
                                                         echo @getemployee($show_total->admin_update);
                                                     }
@@ -617,14 +690,19 @@ echo @$alert;
                                                 </td>
                                                 <td>
                                                     <?php
-                                                    echo '<a href="#" data-toggle="modal" data-target="#show_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-info" data-top="toptitle" data-placement="top" title="ตรวจสอบ"><i class="fa fa-search"></i></a>&nbsp';
-                                                    echo '
-                <a href="?p=case_all_service&key=' . @$show_total->ticket . '" target="_blank" class="btn btn-sm btn-success" data-top="toptitle" data-placement="top" title="ประวัติดำเนินงาน"><span class="fa fa-list-ul"></span></a>&nbsp';
+                                                    if ($_SESSION['uclass'] == 1 && $show_total->card_status == 'wait_checkwork' && $show_total->user_key == $_SESSION['ukey']) {
+                                                        // echo '<a href="#" data-toggle="modal" data-target="#check_work_user" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning" title="ตรวจสอบงาน"><i class="fa fa-edit"></i></a>&nbsp';
+                                                        echo '<a href="#" data-toggle="modal" data-target="#check_work_user" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning  btn-outline" title="ดำเนินการ"><i class="fa fa-edit"></i></a>';
+                                                    }
                                                     ?>
-                                                    <a href="service/print_work.php?key=<?php echo @$show_total->ticket; ?>" target="_blank" class="btn btn-sm btn-outline-danger" data-toggle="toptitle" data-placement="top" title="พิมพ์ใบงาน"><i class="fa fa-print"></i></a>
+                                                    <?php
+                                                    echo '<a href="#" data-toggle="modal" data-target="#show_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-info" title="ตรวจสอบ"><i class="fa fa-search"></i></a>&nbsp';
+                                                    echo '<a href="?p=case_all_service&key=' . @$show_total->ticket . '" class="btn btn-sm btn-success" title="ประวัติดำเนินงาน"><span class="fa fa-list-ul"></span></a>&nbsp';
+                                                    ?>
+                                                    <a href="service/print_work.php?key=<?php echo @$show_total->ticket; ?>" target="_blank" class="btn btn-sm btn-outline-danger" title="พิมพ์ใบงาน"><i class="fa fa-print"></i></a>
                                                     <?php if ($_SESSION['uclass'] == '3' || $_SESSION['uclass'] == '2') {
                                                         if ($show_total->card_status != '2376b33c92767c1437421a99bbc7164f') {
-                                                            echo '<a href="#" data-toggle="modal" data-target="#edit_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-secondary  btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-edit"></i></a>';
+                                                            echo '<a href="#" data-toggle="modal" data-target="#edit_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-secondary  btn-outline" title="ดำเนินการ"><i class="fa fa-edit"></i></a>';
                                                         }
                                                     }
                                                     ?>
@@ -712,6 +790,44 @@ echo @$alert;
             }, function(data) {
                 // แสดงผลลัพธ์ใน input
                 $("#approve").val(data);
+            });
+        });
+        $('#check_work_user').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever') // Extract info from data-* attributes
+            var modal = $(this);
+            var dataString = 'key=' + recipient;
+
+            $.ajax({
+                type: "GET",
+                url: "otherfrm/check_work_user.php",
+                data: dataString,
+                cache: false,
+                success: function(data) {
+                    modal.find('.checkWorkUser').html(data);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        });
+        $('#approve-frm-cctv').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever') // Extract info from data-* attributes
+            var modal = $(this);
+            var dataString = 'key=' + recipient;
+
+            $.ajax({
+                type: "GET",
+                url: "otherfrm/approve_frm_cctv.php",
+                data: dataString,
+                cache: false,
+                success: function(data) {
+                    modal.find('.approve-frm-cctv').html(data);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
             });
         });
     });

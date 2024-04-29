@@ -19,12 +19,12 @@ $get_admin = $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $_S
             <input type="text" class="form-control" name="ticket" id="ticket" value="<?php echo @$chk_case->ticket; ?>" readonly>
         </div>
         <div class="col-md-6 col-sm-12">
-            <label for="checkwork_status">สถานะ</label>
-            <select name="checkwork_status" id="checkwork_status" class="form-control select2bs4" required>
+            <label for="approve_status">สถานะ</label>
+            <select name="approve_status" id="approve_status" class="form-control select2bs4" required>
                 <option value="" selected>--- เลือกข้อมูล ---</option>
 
-                <option value="Y">ผ่าน</option>
-                <option value="reject">ไม่ผ่าน</option>
+                <option value="Y">อนุมัติ</option>
+                <option value="57995055c28df9e82476a54f852bd214">ยกเลิกการแจ้ง / ไม่อนุมัติ</option>
 
             </select>
             <div class="invalid-feedback">
@@ -51,7 +51,7 @@ $get_admin = $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $_S
 </div>
 <div class="modal-footer">
 
-    <button class="ladda-button btn btn-primary btn-square btn-ladda bg-info" type="submit" name="save_checkwork" data-style="expand-left">
+    <button class="ladda-button btn btn-primary btn-square btn-ladda bg-info" type="submit" name="save_approve_cctv" data-style="expand-left">
         <span class="fas fa-save"> บันทึก</span>
         <span class="ladda-spinner"></span>
     </button>
@@ -62,6 +62,8 @@ $get_admin = $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $_S
 <input type="text" name="namecall" hidden value="<?php echo $chk_case->se_namecall; ?>">
 <input type="text" name="location" hidden value="<?php echo @prefixbranch($chk_case->se_location); ?>">
 <input type="text" name="detail" hidden value="<?php echo $chk_case->se_other; ?>">
+<input type="text" name="se_id" hidden  value="<?php echo $chk_case->se_id; ?>">
+<input type="text" name="se_li_id" hidden   value="<?php echo $chk_case->se_li_id; ?>">
 <?php if ($chk_case->se_after != NULL) { ?>
     <input type="text" name="pic_log" value="<?php echo $chk_case->se_after; ?>">
 <?php } ?>

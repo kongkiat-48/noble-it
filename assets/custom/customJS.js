@@ -1497,6 +1497,8 @@ function delect_link(id_link) {
   })
 }
 
+
+
 function changeUsingprefix(prefix_key) {
   if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari
     xmlhttp = new XMLHttpRequest();

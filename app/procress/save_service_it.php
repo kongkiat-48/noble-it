@@ -121,6 +121,7 @@ Ticket : {$runticket}
 รหัสสินทรัพย์ : {$asset}
 ------------------------
 หมวดหมู่ : " . @prefixConvertorService($service) . " 
+รายการ : " . prefixConvertorServiceList($problem) . "
 พบปัญหา : {$other}
             
 วันที่ : {$date_send}
@@ -269,6 +270,8 @@ if (isset($_POST['save_approve'])) {
         $namecall = $_POST['namecall'];
         $location = $_POST['location'];
         $detail = $_POST['detail'];
+        $service = $_POST['se_id'];
+        $problem = $_POST['se_li_id'];
         $line_token = $getalert->alert_line_token; // Token
         $line_text = "
          /*** อนุมัติจากผู้บังคับบัญชา ***/
@@ -279,6 +282,74 @@ if (isset($_POST['save_approve'])) {
          สถานะ :  $status 
          ผู้แจ้ง : " . @getemployee($namecall) . "
          สาขา : $location
+         ------------------------
+         หมวดหมู่ : " . @prefixConvertorService($service) . " 
+         รายการ : " . prefixConvertorServiceList($problem) . "
+         รายละเอียด : $detail
+         ------------------------
+         วันที่: {$date_send}
+         เวลา: {$time_send}
+         ";
+
+        lineNotify($line_text, $line_token); // เรียกใช้ Functions line
+
+        $alert = $success;
+    }
+}
+
+if (isset($_POST['save_approve_cctv'])) {
+    if (!empty($_POST['approve_status'])) {
+        $getFlag = $_POST['approve_status'] == "Y" ? 'work_cctv' : $_POST['approve_status'];
+        $getdata->my_sql_update(
+            $connect,
+            "problem_list",
+            "card_status='" . $getFlag . "',
+            work_flag = '" . $getFlag . "',
+      date_update='" . date("Y-m-d") . "',
+      time_update='" . date("H:i:s") . "'", //เพิ่ม เวลา
+            "ticket='" . htmlspecialchars($_POST['card_key']) . "'"
+        );
+
+        $getdata->my_sql_insert(
+            $connect,
+            "problem_comment",
+            "card_status='" . htmlspecialchars($getFlag) . "',
+      admin_update='" . $name_key . "',
+      comment='" . htmlspecialchars($_POST['comment']) . " - อนุมัติจาก Support Manager',
+      date ='" . date("Y-m-d H:i:s") . "',
+      ticket='" . htmlspecialchars($_POST['card_key']) . "'"
+        );
+
+
+        // ส่งข้อมูลเข้าไลน์
+        $ticket = $_POST['ticket'];
+        $name_admin = $_POST['admin'];
+        if ($_POST['approve_status'] == 'Y') {
+            $status = 'อนุมัติดำเนินงานประเภท CCTV';
+        } else {
+            $status = @cardStatus_for_line($_POST['approve_status']);
+        }
+        // $status = $_POST['off_case_status'];
+        $date_send = date('d/m/Y');
+        $time_send = date("H:i");
+        $namecall = $_POST['namecall'];
+        $location = $_POST['location'];
+        $detail = $_POST['detail'];
+        $service = $_POST['se_id'];
+        $problem = $_POST['se_li_id'];
+        $line_token = $getalert->alert_line_token; // Token
+        $line_text = "
+         /*** อนุมัติจาก Support Manager ***/
+         ------------------------
+         Ticket : $ticket
+         ------------------------
+         ผู้ดำเนินการ : $name_admin
+         สถานะ :  $status 
+         ผู้แจ้ง : " . @getemployee($namecall) . "
+         สาขา : $location
+         ------------------------
+         หมวดหมู่ : " . @prefixConvertorService($service) . " 
+         รายการ : " . prefixConvertorServiceList($problem) . "
          รายละเอียด : $detail
          ------------------------
          วันที่: {$date_send}
@@ -296,7 +367,7 @@ if (isset($_POST['save_checkwork'])) {
         // $getFlag = $_POST['checkwork_status'] == "Y" ? "fe8ae3ced9e7e738d78589bf6610c4da" : 'reject';
 
         if ($_POST['checkwork_status'] == 'Y') {
-            $getFlag = "fe8ae3ced9e7e738d78589bf6610c4da";
+            $getFlag = "wait_checkwork";
             $status = 'ผ่านการตรวจสอบจาก Support Manager';
             $detail = $_POST['comment'] . ' - ' . $status;
         } else {
@@ -334,13 +405,78 @@ if (isset($_POST['save_checkwork'])) {
         $detail = $_POST['detail'];
         $line_token = $getalert->alert_line_token; // Token
         $line_text = "
-         /*** ".$status." ***/
+         /*** " . $status . " ***/
          ------------------------
          Ticket : $ticket
          ------------------------
          ผู้ดำเนินการ : $name_admin
          สถานะ :  $status 
          ผู้แจ้ง : " . @getemployee($namecall) . "
+         สาขา : $location
+         รายละเอียด : $detail
+         ------------------------
+         วันที่: {$date_send}
+         เวลา: {$time_send}
+         ";
+
+        lineNotify($line_text, $line_token); // เรียกใช้ Functions line
+
+        $alert = $success;
+    }
+}
+
+if (isset($_POST['save_checkwork_user'])) {
+    if (!empty($_POST['checkwork_user'])) {
+        if ($_POST['checkwork_user'] == 'Y') {
+            $getFlag = "fe8ae3ced9e7e738d78589bf6610c4da";
+            $status = 'ผ่านการตรวจแล้วสอบจากผู้ใช้งาน';
+            $detail = $_POST['comment'] . ' - ' . $status;
+            $work_flag = 'work_success';
+        } else {
+            $getFlag = 'reject';
+            $status = 'ไม่ผ่านการตรวจสอบจากผู้ใช้งาน';
+            $detail = $_POST['comment'] . ' - ' . $status;
+            $work_flag = 'work_reject';
+        }
+        $getdata->my_sql_update(
+            $connect,
+            "problem_list",
+            "card_status='" . $getFlag . "',
+            work_flag = '" . $work_flag . "'",
+
+            "ticket='" . htmlspecialchars($_POST['card_key']) . "'"
+        );
+
+        $getdata->my_sql_insert(
+            $connect,
+            "problem_comment",
+            "card_status='" . $getFlag . "',
+      admin_update='" . $name_key . "',
+      comment='" . $detail . "',
+      date ='" . date("Y-m-d H:i:s") . "',
+      ticket='" . htmlspecialchars($_POST['card_key']) . "'"
+        );
+
+
+        // ส่งข้อมูลเข้าไลน์
+        $ticket = $_POST['ticket'];
+        $name_admin = $_POST['admin'];
+
+        // $status = $_POST['off_case_status'];
+        $date_send = date('d/m/Y');
+        $time_send = date("H:i");
+        $namecall = $_POST['namecall'];
+        $location = $_POST['location'];
+        $detail = $_POST['detail'];
+        $line_token = $getalert->alert_line_token; // Token
+        $line_text = "
+         /*** " . $status . " ***/
+         ------------------------
+         Ticket : $ticket
+         ------------------------
+         ผู้ดำเนินการ : $name_admin
+         สถานะ :  $status 
+         ผู้แจ้ง : " . $namecall . "
          สาขา : $location
          รายละเอียด : $detail
          ------------------------

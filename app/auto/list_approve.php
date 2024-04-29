@@ -44,7 +44,9 @@ while ($show_total = mysqli_fetch_object($get_total)) {
         <td><?php
             if ($show_total->date_update != '0000-00-00') {
                 echo @dateConvertor($show_total->date_update);
-            } else {
+            } else if ($show_total->card_status == 'wait_approve') {
+                echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+            }else {
                 echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
             } ?>
         </td>

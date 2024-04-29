@@ -17,7 +17,7 @@ date_default_timezone_set('Asia/Bangkok');
 
 <?php
 $i = 0;
-$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id = '154' AND card_status = 'wait_approve' ORDER BY ticket DESC LIMIT 10");
+$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id = '154' AND (manager_approve_status = 'Y' AND work_flag NOT IN ('work_cctv') ORDER BY ticket DESC LIMIT 10");
 while ($show_total = mysqli_fetch_object($get_total)) {
     $i++;
 ?>
@@ -28,11 +28,13 @@ while ($show_total = mysqli_fetch_object($get_total)) {
         <td><?php echo $show_total->time_start; ?></td>
         <td>
             <?php
-            if (@$show_total->card_status == NULL) {
+            if (@$show_total->card_status == NULL && ($show_total->se_id != '8' && $show_total->manager_approve_status != 'Y')) {
                 echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
             } else if ($show_total->card_status == '2e34609794290a770cb0349119d78d21') {
                 echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
-            } else {
+            } else if ($show_total->se_id == '8' && $show_total->manager_approve_status == 'Y') {
+                echo '<span class="badge badge-info">รอ Support Manager อนุมัติ</span>';
+            }else {
                 echo @cardStatus($show_total->card_status);
             }
 
@@ -49,32 +51,9 @@ while ($show_total = mysqli_fetch_object($get_total)) {
 
         <td>
             <?php
-            // echo '
-            //     <a href="?p=case_all_service&key=' . @$show_total->ticket . '" target="_blank" class="btn btn-sm btn-success" data-top="toptitle" data-placement="top" title="อนุมัติ"><i class="fas fa-user-check"></i></a>';
-
-            // echo '<a href="?p=viewcctv" class="btn btn-sm btn-warning btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
-
-            // echo '&nbsp<a href="?p=case_all_service&key=' . @$show_total->ticket . '" target="_blank" class="btn btn-sm btn-success" data-top="toptitle" data-placement="top" title="ตรวจสอบ"><i class="fas fa-list"></i></a>';
-
-            echo '<a href="#" data-toggle="modal" data-target="#approve-frm" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
-
+            echo '<a href="#" data-toggle="modal" data-target="#approve-frm-cctv" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
             ?>
         </td>
-
-        <!-- <td class="text-right">
-            <div class="dropdown show d-inline-block widget-dropdown">
-                <a class="dropdown-toggle icon-burger-mini" href="" role="button" id="dropdown-recent-order1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static"></a>
-                <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdown-recent-order1">
-                    <li class="dropdown-item">
-                        <a href="#">View</a>
-                    </li>
-                    <li class="dropdown-item">
-                        <a href="#">Remove</a>
-                    </li>
-                </ul>
-            </div>
-        </td> -->
-
     </tr>
 <?php
 }

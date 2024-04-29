@@ -17,7 +17,7 @@ date_default_timezone_set('Asia/Bangkok');
 
 <?php
 $i = 0;
-$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status = '2e34609794290a770cb0349119d78d21' ORDER BY ticket DESC LIMIT 10");
+$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status IN ('2e34609794290a770cb0349119d78d21','fe8ae3ced9e7e738d78589bf6610c4da') AND (work_flag != 'work_success' OR work_flag IS NULL) ORDER BY ticket DESC LIMIT 10");
 while ($show_total = mysqli_fetch_object($get_total)) {
     $i++;
 ?>
@@ -56,7 +56,7 @@ while ($show_total = mysqli_fetch_object($get_total)) {
             ?>
             <?php
             echo '
-                <a href="?p=case_all_service&key=' . @$show_total->ticket . '" target="_blank" class="btn btn-sm btn-success" data-top="toptitle" data-placement="top" title="ตรวจสอบ"><i class="fas fa-list"></i></a>';
+                <a href="?p=case_all_service&key=' . @$show_total->ticket . '" class="btn btn-sm btn-success" data-top="toptitle" data-placement="top" title="ตรวจสอบ"><i class="fas fa-list"></i></a>';
             ?>
         </td>
 
