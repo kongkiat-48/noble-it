@@ -492,13 +492,16 @@ if (isset($_POST['save_checkwork_user'])) {
 
 if (isset($_POST['save_approve_hr'])) {
     if (!empty($_POST['approve_status'])) {
-        $getFlag = $_POST['approve_status'] == "Y" ? null : $_POST['approve_status'];
+        // $getFlag = $_POST['approve_status'] == "Y" ? null : $_POST['approve_status'];
+        $getFlag = $_POST['approve_status'] == "Y" ? 'work_hr' : $_POST['approve_status'];
+
         $getdata->my_sql_update(
             $connect,
             "problem_list",
             "card_status='" . $getFlag . "',
             manager_approve_status = 'Y',
-            approve_department = 'IT',
+            approve_department = 'HR',
+            work_flag = 'work_hr',
       date_update='" . date("Y-m-d") . "',
       time_update='" . date("H:i:s") . "'", //เพิ่ม เวลา
             "ticket='" . htmlspecialchars($_POST['card_key']) . "'"

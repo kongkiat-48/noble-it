@@ -33,12 +33,12 @@ $chk_case = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='" . 
     </div>
 
 </div>
-<input type="text" name="card_key" id="card_key" value="<?php echo @htmlspecialchars($_GET['key']); ?>">
-<input type="text" name="name_user" id="name_user"  value="<?php echo @getemployee($chk_case->user_key); ?>">
-<input type="text" name="admin"  value="<?php echo @getemployee($chk_case->admin_update); ?>">
-<input type="text" name="namecall"  value="<?php echo @getemployee($chk_case->se_namecall); ?>">
-<input type="text" name="location"  value="<?php echo @prefixbranch($chk_case->se_location); ?>">
-<input type="text" name="detail"  value="<?php echo $chk_case->se_other; ?>">
+<input type="text" hidden name="card_key" id="card_key" value="<?php echo @htmlspecialchars($_GET['key']); ?>">
+<input type="text" hidden name="name_user" id="name_user"  value="<?php echo @getemployee($chk_case->user_key); ?>">
+<input type="text" hidden name="admin"  value="<?php echo @getemployee($chk_case->admin_update); ?>">
+<input type="text" hidden name="namecall"  value="<?php echo @getemployee($chk_case->se_namecall); ?>">
+<input type="text" hidden name="location"  value="<?php echo @prefixbranch($chk_case->se_location); ?>">
+<input type="text" hidden name="detail"  value="<?php echo $chk_case->se_other; ?>">
 <script>
     $('.select2bs4').select2({
         theme: 'bootstrap4',

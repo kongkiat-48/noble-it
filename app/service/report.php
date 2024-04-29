@@ -339,30 +339,36 @@ if (isset($_POST['export'])) {
                                 <td><?php echo $show_total->se_other; ?></td>
                                 <td><?php echo $show_total->se_approve; ?></td>
                                 <td class="text-center">
-                                    <?php
-                                    if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR')) {
-                                        echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
-                                    } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
-                                        echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
-                                    } else if ($show_total->card_status == NULL && $show_total->approve_department == 'HR') {
-                                        echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
-                                    } else if ($show_total->card_status == 'over_work') {
-                                        echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
-                                    } else {
-                                        if ($show_total->card_status == '2e34609794290a770cb0349119d78d21') {
-                                            echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
-                                        } else if ($show_total->card_status == 'approve_workcheck') {
-                                            echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
+                                <?php
+                                        if ($show_total->se_id == '8' && $show_total->se_li_id == '154' && $show_total->manager_approve_status == 'Y' && $show_total->card_status == NULL) {
+                                            echo '<span class="badge badge-info">รอ Support Manager อนุมัติ</span>';
+                                        } else if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR') || $show_total->card_status == 'work_cctv' || $show_total->card_status == 'work_hr') {
+                                            echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                                        } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
+                                            echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                                        } else if ($show_total->card_status == NULL && $show_total->approve_department == 'HR') {
+                                            echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
+                                        } else if ($show_total->card_status == 'over_work') {
+                                            echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
+                                        } else if ($show_total->card_status == 'reject') {
+                                            echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
                                         } else {
-                                            if ($show_total->card_status == 'wait_approve') {
-                                                echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                                            if (in_array($show_total->card_status, ['2e34609794290a770cb0349119d78d21', 'fe8ae3ced9e7e738d78589bf6610c4da']) && $show_total->work_flag != 'work_success') {
+                                                echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
+                                            } else if ($show_total->card_status == 'approve_workcheck') {
+                                                echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
                                             } else {
-                                                echo @cardStatus($show_total->card_status);
+                                                if ($show_total->card_status == 'wait_approve') {
+                                                    echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                                                } else if ($show_total->card_status == 'wait_checkwork') {
+                                                    echo '<span class="badge badge-primary">รอตรวจสอบงานเสร็จจากผู้แจ้ง</span>';
+                                                } else {
+                                                    echo @cardStatus($show_total->card_status);
+                                                }
                                             }
                                         }
-                                    }
 
-                                    ?>
+                                        ?>
                                 </td>
                                 <td>
                                     <?php
@@ -407,7 +413,11 @@ if (isset($_POST['export'])) {
                                 <td>
                                     <?php
                                     if (@$show_total->admin_update == NULL) {
-                                        echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                                        if ($show_total->card_status == "57995055c28df9e82476a54f852bd214") {
+                                            echo @cardStatus($show_total->card_status);
+                                        } else {
+                                            echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                                        }
                                     } else {
                                         echo @getemployee($show_total->admin_update);
                                     }

@@ -621,7 +621,7 @@ echo @$alert;
                                                     <?php
                                                     if ($show_total->se_id == '8' && $show_total->se_li_id == '154' && $show_total->manager_approve_status == 'Y' && $show_total->card_status == NULL) {
                                                         echo '<span class="badge badge-info">รอ Support Manager อนุมัติ</span>';
-                                                    } else if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR') || $show_total->card_status == 'work_cctv') {
+                                                    } else if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR') || $show_total->card_status == 'work_cctv' || $show_total->card_status == 'work_hr') {
                                                         echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
                                                     } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
                                                         echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';

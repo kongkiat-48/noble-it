@@ -121,7 +121,7 @@ include_once 'service/procress/dataSave.php';
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-md font-weight-bold text-warning text-uppercase mb-1">จำนวนรายการที่รอดำเนินการ</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "ID <> 'hidden' AND (date LIKE '%" . date("Y-m-d") . "%' ) AND card_status != 'fe8ae3ced9e7e738d78589bf6610c4da' AND se_id = '8' AND se_li_id = '154'");
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "date LIKE '%" . date("Y-m") . "%' AND (card_status NOT IN ('fe8ae3ced9e7e738d78589bf6610c4da','2e34609794290a770cb0349119d78d21') OR work_flag != 'work_success') AND se_id = '8' AND se_li_id = '154'");
                                                                             echo @number_format($getall); ?></div>
                     </div>
                     <div class="col-auto">
@@ -166,7 +166,7 @@ include_once 'service/procress/dataSave.php';
                     <tbody>
                         <?php
                         $i = 0;
-                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id = '154' AND card_status IN ('work_cctv','reject') AND manager_approve_status = 'Y' ORDER BY CONVERT(ID, SIGNED) DESC,ID DESC,date ASC");
+                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id = '154' AND  manager_approve_status = 'Y' AND (card_status NOT IN ('fe8ae3ced9e7e738d78589bf6610c4da','2e34609794290a770cb0349119d78d21') AND work_flag NOT IN  ('work_success','')) ORDER BY CONVERT(ID, SIGNED) DESC,ID DESC,date ASC");
                         while ($show_total = mysqli_fetch_object($get_total)) {
                             $i++;
                         ?>
@@ -209,7 +209,7 @@ include_once 'service/procress/dataSave.php';
                                     <?php
                                     if ($show_total->se_id == '8' && $show_total->se_li_id == '154' && $show_total->manager_approve_status == 'Y' && $show_total->card_status == NULL) {
                                         echo '<span class="badge badge-info">รอ Support Manager อนุมัติ</span>';
-                                    } else if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR') || $show_total->card_status == 'work_cctv') {
+                                    } else if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR') || $show_total->card_status == 'work_cctv' || $show_total->card_status == 'work_hr') {
                                         echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
                                     } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
                                         echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';

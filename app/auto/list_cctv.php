@@ -17,7 +17,7 @@ date_default_timezone_set('Asia/Bangkok');
 
 <?php
 $i = 0;
-$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id = '154' AND (manager_approve_status = 'Y' AND work_flag NOT IN ('work_cctv') ORDER BY ticket DESC LIMIT 10");
+$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id = '154' AND (manager_approve_status = 'Y' AND work_flag NOT IN ('work_cctv','work_success') OR card_status = '') ORDER BY ticket DESC LIMIT 10");
 while ($show_total = mysqli_fetch_object($get_total)) {
     $i++;
 ?>

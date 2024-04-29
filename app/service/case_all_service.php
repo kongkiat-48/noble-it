@@ -77,7 +77,12 @@ $card_detail = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='"
                     } else if ($showcard_status->card_status == 'wait_checkwork') {
                       echo '<span class="badge badge-primary">รอตรวจสอบงานเสร็จจากผู้แจ้ง</span>';
                     } else {
+                      if($showcard_status->card_status == 'work_cctv'){
+                        echo '<span class="badge badge-info">อนุมัติจาก Support Manager</span>';
+
+                      } else {
                       echo @cardStatus($showcard_status->card_status);
+                      }
                     }
                   }
                 }
