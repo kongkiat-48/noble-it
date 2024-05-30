@@ -57,14 +57,19 @@ if (isset($_POST['save_offcase'])) {
         $location = $_POST['location'];
         $detail = $_POST['detail'];
         $line_token = $getalert->alert_line_token; // Token
+        if($_SESSION['uclass'] != 1) {
+            $txtStatus = 'ตอบรับการดำเนินการ';
+        } else {
+            $txtStatus = 'ตอบกลับจากผู้ใช้งาน';
+        }
         $line_text = "
-         /*** ตอบรับการดำเนินการ ***/
+         /*** ".$txtStatus." ***/
          ------------------------
          Ticket : $ticket
          ------------------------
          ผู้ดำเนินการ : $name_admin
          สถานะ :  " . @cardStatus_for_line($status) . " 
-         ผู้แจ้ง : $namecall
+         ผู้แจ้ง : ".@getemployee($namecall)."
          สาขา : $location
          รายละเอียด : $detail
          ------------------------

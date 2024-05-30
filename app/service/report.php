@@ -1,23 +1,49 @@
 <?php
 
 if (isset($_POST['export'])) {
+    // $month = @$_POST['month_case'];
+    // $year = @$_POST['year_case'];
+    // $status = @$_POST['status'];
 
-    if ($_POST['month_case'] != NULL && $_POST['year_case'] == NULL) {
-        $month_case = $_POST['month_case'];
-        $getcaseshow = $getdata->my_sql_select($connect, NULL, "problem_list", "ID <> 'hidden' AND date LIKE '%" . date("Y-" . $month_case . "") . "%' ORDER BY ticket", "ID");
+    $month_case = isset($_POST['month_case']) ? $_POST['month_case'] : null;
+    $year_case = isset($_POST['year_case']) ? $_POST['year_case'] : null;
+    $status = isset($_POST['status']) ? $_POST['status'] : null;
+    $permission = isset($_POST['permission']) ? $_POST['permission'] : null;
+    
+
+    // if ($_POST['month_case'] != NULL && $_POST['year_case'] == NULL) {
+    //     $month_case = $_POST['month_case'];
+    //     $getcaseshow = $getdata->my_sql_select($connect, NULL, "problem_list", "date LIKE '%" . date("Y-" . $month_case . "") . "%' ORDER BY ticket", "ID");
+    // }
+    // if ($_POST['year_case'] != NULL && $_POST['month_case'] == NULL) {
+    //     $year_case = $_POST['year_case'];
+    //     $getcaseshow = $getdata->my_sql_select($connect, NULL, "problem_list", "date LIKE '%" . date($year_case) . "%' ORDER BY ticket", "ID");
+    // }
+    // if ($_POST['year_case'] != NULL && $_POST['month_case'] != NULL) {
+    //     $month_case = $_POST['month_case'];
+    //     $year_case = $_POST['year_case'];
+    //     $getcaseshow = $getdata->my_sql_select($connect, NULL, "problem_list", "date LIKE '%" . date($year_case . "-" . $month_case . "-" .  "") . "%' ORDER BY ticket", "ID");
+    // }
+    // if ($_POST['year_case'] == NULL && $_POST['month_case'] == NULL) {
+    //     $getcaseshow = $getdata->my_sql_select($connect, NULL, "problem_list", "ID <> 'hidden' ORDER BY ticket DESC");
+    // }
+    $whereClause = "ID <> 'hidden'";
+    if ($month_case != null && $year_case == null) {
+        $whereClause .= " AND date LIKE '%" . date("Y-$month_case") . "%'";
+    } elseif ($year_case != null && $month_case == null) {
+        $whereClause .= " AND date LIKE '%" . date("$year_case") . "%'";
+    } elseif ($year_case != null && $month_case != null) {
+        $whereClause .= " AND date LIKE '%" . date("$year_case-$month_case") . "%'";
     }
-    if ($_POST['year_case'] != NULL && $_POST['month_case'] == NULL) {
-        $year_case = $_POST['year_case'];
-        $getcaseshow = $getdata->my_sql_select($connect, NULL, "problem_list", "ID <> 'hidden' AND date LIKE '%" . date($year_case) . "%' ORDER BY ticket", "ID");
+    if ($status != null) {
+        $whereClause .= " AND card_status = '$status'";
     }
-    if ($_POST['year_case'] != NULL && $_POST['month_case'] != NULL) {
-        $month_case = $_POST['month_case'];
-        $year_case = $_POST['year_case'];
-        $getcaseshow = $getdata->my_sql_select($connect, NULL, "problem_list", "ID <> 'hidden' AND date LIKE '%" . date($year_case . "-" . $month_case . "-" .  "") . "%' ORDER BY ticket", "ID");
+
+    if ($permission != null) {
+        $whereClause .= " AND se_id = '$permission'";
     }
-    if ($_POST['year_case'] == NULL && $_POST['month_case'] == NULL) {
-        $getcaseshow = $getdata->my_sql_select($connect, NULL, "problem_list", "ID <> 'hidden' ORDER BY ticket DESC");
-    }
+
+    $getcaseshow = $getdata->my_sql_select($connect, null, "problem_list", $whereClause . " ORDER BY ticket", "ID");
 
 
 
@@ -95,8 +121,8 @@ if (isset($_POST['export'])) {
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-md font-weight-bold text-success text-uppercase mb-1">จำนวนรายการแจ้งปัญหาที่เสร็จแล้ว</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "card_status = '2e34609794290a770cb0349119d78d21' AND (date LIKE '%" . date("Y-m") . "%' )");
-                                                                            echo @number_format($getall); ?></div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IN ('2e34609794290a770cb0349119d78d21','2376b33c92767c1437421a99bbc7164f','fe8ae3ced9e7e738d78589bf6610c4da') AND (date LIKE '%" . date("Y-m") . "%' ) AND se_id != '8' AND se_li_id != '154'");
+                                                                  echo @number_format($getall); ?></div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-check fa-2x text-gray-300"></i>
@@ -170,7 +196,7 @@ if (isset($_POST['export'])) {
         <form method="post" action="<?php echo $SERVER_NAME; ?>" class="needs-validation">
 
             <div class="form-group row d-flex justify-content-center">
-                <div class="col-md-6 col-sm-12">
+                <div class="col-md-3 col-sm-12">
                     <label for="month_case">ระบุเดือน</label>
                     <select name="month_case" id="month_case" class="form-control select2bs4">
                         <option value="" selected>--- เลือกข้อมูล ---</option>
@@ -189,7 +215,7 @@ if (isset($_POST['export'])) {
                     </select>
                 </div>
 
-                <div class="col-md-6 col-sm-12">
+                <div class="col-md-3 col-sm-12">
                     <label for="year_case">ระบุปี</label>
                     <?php
                     // Sets the top option to be the current year. (IE. the option that is chosen by default).
@@ -209,6 +235,34 @@ if (isset($_POST['export'])) {
                     print '</select>';
                     ?>
                 </div>
+
+                <div class="col-md-3 col-sm-12">
+                    <label for="status">ระบุสถานะงาน</label>
+                    <select name="status" id="status" class="form-control select2bs4">
+                        <option value="" selected>--- เลือกข้อมูล ---</option>
+                        <?php
+                        $select_status = $getdata->my_sql_select($connect, NULL, "card_type", "ctype_status ='1' ORDER BY ctype_insert");
+
+                        while ($show_status = mysqli_fetch_object($select_status)) {
+
+                            echo '<option value="' . $show_status->ctype_key . '">' . $show_status->ctype_name . '</option>';
+                        }
+
+
+
+                        ?>
+                    </select>
+                </div>
+
+                <div class="col-md-3 col-sm-12">
+                    <label for="permission">ระบุลักษณะงาน</label>
+                    <select name="permission" id="permission" class="form-control select2bs4">
+                        <option value="" selected>--- เลือกข้อมูล ---</option>
+                        <option value="13">ข้อมูลเข้าถึง Erp & POS</option>
+                        <option value="8">ข้อมูลเข้าถึง CCTV</option>
+                    </select>
+                </div>
+
             </div>
 
             <?php if (isset($_POST['export'])) { ?>
@@ -270,20 +324,51 @@ if (isset($_POST['export'])) {
                                 <!-- <td><?php echo @getemployee($show_total->user_key); ?></td>
                                 <td><?php echo @getemployee_department($show_total->user_key); ?></td> -->
                                 <td><?php echo $show_total->se_asset; ?></td>
-                                <td><?php echo $show_total->se_namecall; ?></td>
+                                <td><?php
+                                    $search = $getdata->my_sql_query($connect, NULL, "employee", "card_key ='" . $show_total->se_namecall . "'");
+                                    if (COUNT($search) == 0) {
+                                        $chkName = $show_total->se_namecall;
+                                    } else {
+                                        $chkName = getemployee($show_total->se_namecall);
+                                    }
+
+                                    echo $chkName;
+                                    ?></td>
                                 <td><?php echo @prefixbranch($show_total->se_location); ?></td>
                                 <td><?php echo @service($show_total->se_id); ?></td>
                                 <td><?php echo $show_total->se_other; ?></td>
                                 <td><?php echo $show_total->se_approve; ?></td>
                                 <td class="text-center">
-                                    <?php
-                                    if (@$show_total->card_status == NULL) {
-                                        echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
-                                    } else {
-                                        echo @cardStatus($show_total->card_status);
-                                    }
+                                <?php
+                                        if ($show_total->se_id == '8' && $show_total->se_li_id == '154' && $show_total->manager_approve_status == 'Y' && $show_total->card_status == NULL) {
+                                            echo '<span class="badge badge-info">รอ Support Manager อนุมัติ</span>';
+                                        } else if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR') || $show_total->card_status == 'work_cctv' || $show_total->card_status == 'work_hr') {
+                                            echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                                        } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
+                                            echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                                        } else if ($show_total->card_status == NULL && $show_total->approve_department == 'HR') {
+                                            echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
+                                        } else if ($show_total->card_status == 'over_work') {
+                                            echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
+                                        } else if ($show_total->card_status == 'reject') {
+                                            echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
+                                        } else {
+                                            if (in_array($show_total->card_status, ['2e34609794290a770cb0349119d78d21', 'fe8ae3ced9e7e738d78589bf6610c4da']) && $show_total->work_flag != 'work_success') {
+                                                echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
+                                            } else if ($show_total->card_status == 'approve_workcheck') {
+                                                echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
+                                            } else {
+                                                if ($show_total->card_status == 'wait_approve') {
+                                                    echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                                                } else if ($show_total->card_status == 'wait_checkwork') {
+                                                    echo '<span class="badge badge-primary">รอตรวจสอบงานเสร็จจากผู้แจ้ง</span>';
+                                                } else {
+                                                    echo @cardStatus($show_total->card_status);
+                                                }
+                                            }
+                                        }
 
-                                    ?>
+                                        ?>
                                 </td>
                                 <td>
                                     <?php
@@ -328,7 +413,11 @@ if (isset($_POST['export'])) {
                                 <td>
                                     <?php
                                     if (@$show_total->admin_update == NULL) {
-                                        echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                                        if ($show_total->card_status == "57995055c28df9e82476a54f852bd214") {
+                                            echo @cardStatus($show_total->card_status);
+                                        } else {
+                                            echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                                        }
                                     } else {
                                         echo @getemployee($show_total->admin_update);
                                     }

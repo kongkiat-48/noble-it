@@ -36,7 +36,16 @@
           <h5 class="font-weight-bold">รหัสสินทรัพย์ : <u><?php echo $card_detail->se_asset; ?></u></h5>
         </div>
         <div class="row m-2">
-          <h5 class="font-weight-bold">ชื่อผู้แจ้ง : <u><?php echo $card_detail->se_namecall; ?></u></h5>
+          <h5 class="font-weight-bold">ชื่อผู้แจ้ง : <u><?php
+                  $search = $getdata->my_sql_query($connect, NULL, "employee", "card_key ='" . $card_detail->se_namecall . "'");
+                  if (COUNT($search) == 0) {
+                    $chkName = $card_detail->se_namecall;
+                  } else {
+                    $chkName = getemployee($card_detail->se_namecall);
+                  }
+
+                  echo $chkName;
+                  ?></u></h5>
         </div>
         <div class="row m-2">
           <h5 class="font-weight-bold">สาขา : <u><?php echo @prefixbranch($card_detail->se_location); ?></u></h5>

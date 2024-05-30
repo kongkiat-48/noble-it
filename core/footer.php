@@ -5,7 +5,7 @@
 
 
 <script src="../assets/plugins/charts/Chart.min.js"></script>
-
+<script src="../assets/plugins/nprogress/nprogress.js"></script>
 
 
 <script src="../assets/plugins/jvectormap/jquery-jvectormap-2.0.3.min.js"></script>
@@ -27,7 +27,7 @@
 
 <script src="../assets/plugins/data-tables/datatables.responsive.min.js"></script>
 
-<script src="../assets/custom/customJS.js"></script>
+<script src="../assets/custom/customJS.js?v=<?php date("H:i:s"); ?>"></script>
 
 
 <script src="../assets/plugins/select2/js/select2.full.min.js"></script>

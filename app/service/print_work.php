@@ -114,7 +114,16 @@ $chk_case = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='" . 
             <div class="form-group row">
                 <div class="col-md-6 col-sm-12">
                     <label for="namecall">ชื่อผู้แจ้ง</label>
-                    <input type="text" name="namecall" id="namecall" class="form-control" readonly value="<?php echo $chk_case->se_namecall; ?>">
+                    <input type="text" name="namecall" id="namecall" class="form-control" readonly value="<?php
+                  $search = $getdata->my_sql_query($connect, NULL, "employee", "card_key ='" . $chk_case->se_namecall . "'");
+                  if (COUNT($search) == 0) {
+                    $chkName = $chk_case->se_namecall;
+                  } else {
+                    $chkName = getemployee($chk_case->se_namecall);
+                  }
+
+                  echo $chkName;
+                  ?>">
                 </div>
                 <div class="col-md-6 col-sm-12">
                     <label for="location">สาขา</label>

@@ -109,7 +109,7 @@ $getalert = $getdata->my_sql_query($connect, NULL, "system_alert", NULL);
                             </div>
                             <div class="col-md-6 col-sm-12">
                                 <label for="password">รหัสผ่าน</label>
-                                <input type="password" class="form-control" name="password" id="password" value="">
+                                <input type="password" class="form-control" name="password" id="password" value="<?php echo $getalert->alert_mail_pass; ?>">
                             </div>
 
                         </div>

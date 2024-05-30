@@ -7,35 +7,36 @@ jQuery(document).ready(function () {
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
   jQuery('#responsive-data-table-summary').DataTable({
-    "aLengthMenu": [[10,20, 30, 50, 75, -1], [10,20, 30, 50, 75, "All"]],
+    "aLengthMenu": [[10, 20, 30, 50, 75, -1], [10, 20, 30, 50, 75, "All"]],
     "autoWidth": false,
+    "order": [[0, 'ASC']],
     // "columnDefs": [
-      // {"width": "2%", "targets": 0},
-      // {"width": "2%", "targets": 1},
-      // {"width": "2%", "targets": 2},
-      // {"width": "2%", "targets": 3},
-      // {"width": "2%", "targets": 4},
-      // {"width": "2%", "targets": 5},
-      // {"width": "82%", "targets": 6},
-      // {"width": "7.6%", "targets": 7},
-      // {"width": "7.6%", "targets": 8},
-      // {"width": "7.6%", "targets": 9},
-      // {"width": "7.6%", "targets": 10},
-      // {"width": "7.6%", "targets": 11},
-      // {"width": "7.6%", "targets": 12},
+    // {"width": "2%", "targets": 0},
+    // {"width": "2%", "targets": 1},
+    // {"width": "2%", "targets": 2},
+    // {"width": "2%", "targets": 3},
+    // {"width": "2%", "targets": 4},
+    // {"width": "2%", "targets": 5},
+    // {"width": "82%", "targets": 6},
+    // {"width": "7.6%", "targets": 7},
+    // {"width": "7.6%", "targets": 8},
+    // {"width": "7.6%", "targets": 9},
+    // {"width": "7.6%", "targets": 10},
+    // {"width": "7.6%", "targets": 11},
+    // {"width": "7.6%", "targets": 12},
     // ], 
-    "pageLength": 10,
+    "pageLength": 50,
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
   jQuery('#responsive-data-table-summary-2').DataTable({
-    "aLengthMenu": [[10,20, 30, 50, 75, -1], [10,20, 30, 50, 75, "All"]],
+    "aLengthMenu": [[10, 20, 30, 50, 75, -1], [10, 20, 30, 50, 75, "All"]],
     "pageLength": 10,
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
   jQuery('#responsive-data-table-it').DataTable({
     "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
     "pageLength": 20,
-    "order": [[0,'desc'],[ 3, 'asc' ]],
+    "order": [[0, 'desc'], [3, 'asc']],
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
   jQuery('#responsive-data-table-it-success').DataTable({
@@ -44,7 +45,7 @@ jQuery(document).ready(function () {
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
   jQuery('#responsive-data-table-it-success-all-company').DataTable({
-    "aLengthMenu": [[10, 20, 30, 50, 75,500, -1], [10, 20, 30, 50, 75,500, "All"]],
+    "aLengthMenu": [[10, 20, 30, 50, 75, 500, -1], [10, 20, 30, 50, 75, 500, "All"]],
     "pageLength": 500,
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
@@ -104,7 +105,7 @@ jQuery(document).ready(function () {
     "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
     "pageLength": 20,
     "ordering": false,
-    "order": [[0,'desc']],
+    "order": [[0, 'desc']],
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
 });
@@ -152,6 +153,14 @@ $(function () {
       'pageLength'
 
     ],
+  });
+
+
+
+  $('#for-home').DataTable({
+    // dom: 'Bfrtip',
+    scrollX: true,
+    scrollY: true,
   });
 
   $('#ForExport2').DataTable({
@@ -507,6 +516,66 @@ $(function () {
     });
   });
 
+  $('#approve-frm').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    var modal = $(this);
+    var dataString = 'key=' + recipient;
+
+    $.ajax({
+      type: "GET",
+      url: "otherfrm/approve_frm.php",
+      data: dataString,
+      cache: false,
+      success: function (data) {
+        modal.find('.approve-frm').html(data);
+      },
+      error: function (err) {
+        console.log(err);
+      }
+    });
+  });
+
+  $('#checkwork-frm').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    var modal = $(this);
+    var dataString = 'key=' + recipient;
+
+    $.ajax({
+      type: "GET",
+      url: "otherfrm/checkwork_frm.php",
+      data: dataString,
+      cache: false,
+      success: function (data) {
+        modal.find('.checkwork-frm').html(data);
+      },
+      error: function (err) {
+        console.log(err);
+      }
+    });
+  });
+
+  $('#approve-hr').on('show.bs.modal', function (event) {
+    var button = $(event.relatedTarget) // Button that triggered the modal
+    var recipient = button.data('whatever') // Extract info from data-* attributes
+    var modal = $(this);
+    var dataString = 'key=' + recipient;
+
+    $.ajax({
+      type: "GET",
+      url: "otherfrm/approve_hr.php",
+      data: dataString,
+      cache: false,
+      success: function (data) {
+        modal.find('.approve-hr').html(data);
+      },
+      error: function (err) {
+        console.log(err);
+      }
+    });
+  });
+
 
   $('#edit_case').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
@@ -835,7 +904,7 @@ $(function () {
     });
   })
 
-  
+
   $('#editMail').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var recipient = button.data('whatever') // Extract info from data-* attributes
@@ -1197,6 +1266,27 @@ function deleteEmployee(em_key) {
   })
 }
 
+function deleteManager(id) {
+  Swal.fire({
+    title: 'ต้องการลบข้อมูลนี้ใช่หรือไม่',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'ยืนยันการลบ',
+    cancelButtonText: 'ยกเลิก'
+  }).then((result) => {
+    if (result.value) {
+      Swal.fire({
+        title: "Deleted !!!",
+        html: "<h4>กำลังลบข้อมูล...</h4>",
+        showConfirmButton: false
+      })
+      window.location = "function.php?type=delete_manager&key=" + id;
+    }
+  })
+}
+
 function deleteasset(asset_key) {
   Swal.fire({
     title: 'ต้องการลบข้อมูลนี้ใช่หรือไม่',
@@ -1406,6 +1496,8 @@ function delect_link(id_link) {
     }
   })
 }
+
+
 
 function changeUsingprefix(prefix_key) {
   if (window.XMLHttpRequest) { // code for IE7+, Firefox, Chrome, Opera, Safari

@@ -95,3 +95,12 @@ Swal.fire({
     showConfirmButton: false
 });
 </script>';
+
+$wrongPassword = '<script type="text/javascript">
+    Swal.fire({
+        icon: "error",
+        title: "รหัสผ่านเดิมไม่ถูกต้อง",
+        timer: 3000,  
+        showConfirmButton: false
+    })
+</script>';

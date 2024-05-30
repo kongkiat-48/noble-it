@@ -17,6 +17,29 @@ if (isset($_POST['save_mail'])) {
         echo "<META HTTP-EQUIV='Refresh' CONTENT = '2; URL='" . $SERVER_NAME . "'>";
     }
 }
+
+if (isset($_POST['password_edit'])) {
+    if ($getmember_info->password != md5(htmlspecialchars($_POST['old_password']))) {
+        $alert = $wrongPassword;
+        //echo "<META HTTP-EQUIV='Refresh' CONTENT = '2; URL='" . $SERVER_NAME . "'>";
+    } else {
+        if (md5(htmlspecialchars($_POST['new_password'])) != md5(htmlspecialchars($_POST['conf_password']))) {
+            $alert = $ck_pass;
+            //echo "<META HTTP-EQUIV='Refresh' CONTENT = '2; URL='" . $SERVER_NAME . "'>";
+        } else {
+            if (htmlspecialchars($_POST['new_password']) != null && htmlspecialchars($_POST['conf_password']) != null) {
+                $getdata->my_sql_update($connect, 'user', "
+                password='" . md5(htmlspecialchars($_POST['new_password'])) . "'", "user_key='" . $_SESSION['ukey'] . "'");
+                $alert = $success;
+                //echo "<META HTTP-EQUIV='Refresh' CONTENT = '2; URL='" . $SERVER_NAME . "'>";
+            } else {
+                $alert = $warning;
+                //echo "<META HTTP-EQUIV='Refresh' CONTENT = '2; URL='" . $SERVER_NAME . "'>";
+            }
+        }
+    }
+}
+
 echo @$alert;
 ?>
 <div class="row">
@@ -88,6 +111,33 @@ echo @$alert;
                 <?php } ?>
             </div>
         </div>
+        <hr class="sidebar-divider d-none d-md-block">
+        <form method="post" enctype="multipart/form-data">
+
+            <div class="row">
+                <div class="form-group col-md-4 col-sm-12">
+                    <label for="old_password">รหัสผ่านเก่า</label>
+                    <input id="old_password" type="password" class="form-control" name="old_password" value="">
+                    <span toggle="#old_password" class="fa fa-fw fa-eye field-icon old_password"></span>
+                </div>
+                <div class="form-group col-md-4 col-sm-12">
+                    <label for="new_password">รหัสผ่านใหม่</label>
+                    <input type="password" class="form-control" name="new_password" id="new_password" value="" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}" title="กำหนดรหัสผ่านอย่างน้อย 6 หลักโดยมีตัวเล็ก,ตัวใหญ่และตัวเลข">
+                    <span toggle="#new_password" class="fa fa-fw fa-eye field-icon new_password"></span>
+                </div>
+                <div class="form-group col-md-4 col-sm-12">
+                    <label for="conf_password">ยืนยันรหัสผ่านใหม่</label>
+                    <input type="password" class="form-control" name="conf_password" id="conf_password" value="" pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{6,}" title="กำหนดรหัสผ่านอย่างน้อย 6 หลักโดยมีตัวเล็ก,ตัวใหญ่และตัวเลข">
+                    <span toggle="#conf_password" class="fa fa-fw fa-eye field-icon conf_password"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 text-center">
+                    <button type="submit" class="btn btn-outline-primary mb-2 btn-pill" name="password_edit"><span class="fas fa-key"></span> Update Password</button>
+                </div>
+            </div>
+        </form>
+
     </div>
     <div class="card-footer text-center">
         <a class="btn btn-xs btn-outline-info" href="index.php?p=setting"><i class="fa fa-reply"></i> กลับ</a>

@@ -19,7 +19,7 @@ require 'inc_file.php';
             <i class="fas fa-user-check"></i>
         </div>
         <div class="media-body align-self-center">
-            <h4 class="mb-2"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "user_key = '" . $_SESSION['ukey'] . "' AND card_status = '2e34609794290a770cb0349119d78d21' AND (date LIKE '%" . date("Y-m") . "%' )");
+            <h4 class="mb-2"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "user_key = '" . $_SESSION['ukey'] . "' AND work_flag = 'work_success' AND (date LIKE '%" . date("Y-m") . "%' )");
                                             echo @number_format($getall); ?></h4>
             <p>Success</p>
         </div>

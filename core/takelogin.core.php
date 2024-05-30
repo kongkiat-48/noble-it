@@ -21,6 +21,7 @@ if ($check == 0) {
 			$_SESSION['uclass'] = $getinfo->user_class;
 			$_SESSION['lang'] = $getinfo->user_language;
 			$_SESSION['ukey'] = $getinfo->user_key;
+			$_SESSION['emailuser'] = $getinfo->email;
 			insertLogs($getinfo->username . " เข้าสู่ระบบ.", $_SERVER['REMOTE_ADDR'], $getinfo->user_key);
 			// echo "OK";
 			if ($getinfo->user_class <= 3 && $getinfo->user_status == 1) {

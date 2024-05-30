@@ -181,6 +181,17 @@ if (isset($_POST['save_access'])) {
 }
 
 
+if (isset($_POST['save_editMail'])) {
+	$getdata->my_sql_update(
+		$connect,
+		"user",
+		"email ='" . htmlspecialchars($_POST['email']) . "'",
+		"id='" . htmlspecialchars($_POST['id_user']) . "'"
+	);
+	$alert = $saveedit;
+}
+
+
 if (isset($_POST['save_status'])) {
 	if (htmlspecialchars($_POST['status_name']) != NULL) {
 		$ctype_key = md5(htmlspecialchars($_POST['status_name']));
@@ -196,16 +207,6 @@ if (isset($_POST['save_status'])) {
 	} else {
 		$alert = $warning;
 	}
-}
-
-if (isset($_POST['save_editMail'])) {
-	$getdata->my_sql_update(
-		$connect,
-		"user",
-		"email ='" . htmlspecialchars($_POST['email']) . "'",
-		"id='" . htmlspecialchars($_POST['id_user']) . "'"
-	);
-	$alert = $saveedit;
 }
 
 if (isset($_POST['save_edit_status'])) {
@@ -324,34 +325,53 @@ if (isset($_POST['save_info'])) {
 }
 
 if (isset($_POST['save_alert'])) {
-	$line = htmlspecialchars($_POST['line_notify']);
+	$lineToken = $_POST['line_notify'];
 	$mail_host = htmlspecialchars($_POST['host']);
 	$mail_get = htmlspecialchars($_POST['getmail']);
 	$username = htmlspecialchars($_POST['username']);
 	$password = $_POST['password'];
 
-	if ($password != NULL) {
-		$getdata->my_sql_update(
-			$connect,
-			"system_alert",
-			"alert_line_token = '" . $line . "',
+	$getdata->my_sql_update(
+		$connect,
+		'system_alert',
+		"alert_line_token = '" . $lineToken . "',
 			alert_mail_server = '" . $mail_host . "',
 			alert_mail_user = '" . $username . "',
 			alert_mail_pass = '" . $password . "',
-			alert_mail_get = '" . $mail_get . "'"
+			alert_mail_get = '" . $mail_get . "'",
+		'alert_key = "cd5fe35c5af97026fd4efdfe4afd4376"'
+	);
+	$alert = $success;
+}
+
+if (isset($_POST['save_list_admin_approve'])) {
+	if (!empty(htmlspecialchars($_POST['list_admin'])) && !empty(htmlspecialchars($_POST['approve_menu']))) {
+		$getdata->my_sql_insert(
+			$connect,
+			"list_admin_approve",
+			"user_key = '" . htmlspecialchars($_POST['list_admin']) . "',
+			approve_menu = '" . htmlspecialchars($_POST['approve_menu']) . "',
+			create_at = '" . date('Y-m-d H:i:s') . "',
+            create_user ='" . Userlogin($_SESSION['ukey']) . "'"
 		);
+
+		$alert = $success;
 	} else {
+		$alert = $warning;
+	}
+}
+
+if (isset($_POST['edit_list_admin_approve'])) {
+	if (!empty(htmlspecialchars($_POST['edit_approve_menu']))) {
 		$getdata->my_sql_update(
 			$connect,
-			"system_alert",
-			"alert_line_token = '" . $line . "',
-			alert_mail_server = '" . $mail_host . "',
-			alert_mail_user = '" . $username . "',
-			alert_mail_get = '" . $mail_get . "'"
+			"list_admin_approve",
+			"approve_menu = '" . htmlspecialchars($_POST['edit_approve_menu']) . "'",
+			"id = '" . htmlspecialchars($_POST['list_approve_id']) . "'"
 		);
+
+		$alert = $saveedit;
+	} else {
+		$alert = $warning;
 	}
-
-
-
-	$alert = $success;
 }
