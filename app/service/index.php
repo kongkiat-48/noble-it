@@ -293,7 +293,7 @@ include_once 'procress/dataSave.php';
             <?php
             $i = 0;
             // $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status NOT IN ('2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214','2376b33c92767c1437421a99bbc7164f','wait_approve') OR card_status IS NULL AND approve_department = 'IT' ORDER BY ticket DESC");
-            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status NOT IN ('2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214','2376b33c92767c1437421a99bbc7164f','wait_approve','approve_workcheck','fe8ae3ced9e7e738d78589bf6610c4da','wait_checkwork') AND approve_department IN ('IT','HR') AND se_id != '8' AND se_li_id != '154' ORDER BY ticket DESC");
+            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status NOT IN ('2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214','2376b33c92767c1437421a99bbc7164f','wait_approve','approve_workcheck','fe8ae3ced9e7e738d78589bf6610c4da','wait_checkwork') AND approve_department IN ('IT','HR') AND se_id != '8' AND se_li_id != '154' OR (manager_approve IS NULL AND work_flag != 'work_success') ORDER BY ticket DESC");
             while ($show_total = mysqli_fetch_object($get_total)) {
               $i++;
             ?>
@@ -463,7 +463,7 @@ include_once 'procress/dataSave.php';
               <tbody>
                 <?php
                 $i = 0;
-                $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "approve_department IN ('IT','HR') AND (user_key = '" . $_SESSION['ukey'] . "' OR manager_approve = '" . $_SESSION['ukey'] . "') AND card_status NOT IN ('wait_approve','57995055c28df9e82476a54f852bd214','') ORDER BY ticket DESC");
+                $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "approve_department IN ('IT','HR') AND (user_key = '" . $_SESSION['ukey'] . "' OR manager_approve = '" . $_SESSION['ukey'] . "' OR se_namecall = '" . $_SESSION['ukey'] . "') AND card_status NOT IN ('wait_approve','57995055c28df9e82476a54f852bd214','') ORDER BY ticket DESC");
                 while ($show_total = mysqli_fetch_object($get_total)) {
                   $i++;
                 ?>

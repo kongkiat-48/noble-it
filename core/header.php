@@ -18,7 +18,7 @@
 <link href="../assets/plugins/fontawesome-5.12.1/css/all.css" rel="stylesheet" type="text/css">
 
 
-<script src="../assets/plugins/nprogress/nprogress.js"></script>
+
 
 <link href="../assets/plugins/ladda/ladda.min.css" rel="stylesheet" />
 <!-- GOOGLE FONTS -->

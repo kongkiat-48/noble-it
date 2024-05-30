@@ -7,36 +7,36 @@ jQuery(document).ready(function () {
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
   jQuery('#responsive-data-table-summary').DataTable({
-    "aLengthMenu": [[10,20, 30, 50, 75, -1], [10,20, 30, 50, 75, "All"]],
+    "aLengthMenu": [[10, 20, 30, 50, 75, -1], [10, 20, 30, 50, 75, "All"]],
     "autoWidth": false,
-    "order": [[0,'ASC']],
+    "order": [[0, 'ASC']],
     // "columnDefs": [
-      // {"width": "2%", "targets": 0},
-      // {"width": "2%", "targets": 1},
-      // {"width": "2%", "targets": 2},
-      // {"width": "2%", "targets": 3},
-      // {"width": "2%", "targets": 4},
-      // {"width": "2%", "targets": 5},
-      // {"width": "82%", "targets": 6},
-      // {"width": "7.6%", "targets": 7},
-      // {"width": "7.6%", "targets": 8},
-      // {"width": "7.6%", "targets": 9},
-      // {"width": "7.6%", "targets": 10},
-      // {"width": "7.6%", "targets": 11},
-      // {"width": "7.6%", "targets": 12},
+    // {"width": "2%", "targets": 0},
+    // {"width": "2%", "targets": 1},
+    // {"width": "2%", "targets": 2},
+    // {"width": "2%", "targets": 3},
+    // {"width": "2%", "targets": 4},
+    // {"width": "2%", "targets": 5},
+    // {"width": "82%", "targets": 6},
+    // {"width": "7.6%", "targets": 7},
+    // {"width": "7.6%", "targets": 8},
+    // {"width": "7.6%", "targets": 9},
+    // {"width": "7.6%", "targets": 10},
+    // {"width": "7.6%", "targets": 11},
+    // {"width": "7.6%", "targets": 12},
     // ], 
     "pageLength": 50,
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
   jQuery('#responsive-data-table-summary-2').DataTable({
-    "aLengthMenu": [[10,20, 30, 50, 75, -1], [10,20, 30, 50, 75, "All"]],
+    "aLengthMenu": [[10, 20, 30, 50, 75, -1], [10, 20, 30, 50, 75, "All"]],
     "pageLength": 10,
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
   jQuery('#responsive-data-table-it').DataTable({
     "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
     "pageLength": 20,
-    "order": [[0,'desc'],[ 3, 'asc' ]],
+    "order": [[0, 'desc'], [3, 'asc']],
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
   jQuery('#responsive-data-table-it-success').DataTable({
@@ -45,7 +45,7 @@ jQuery(document).ready(function () {
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
   jQuery('#responsive-data-table-it-success-all-company').DataTable({
-    "aLengthMenu": [[10, 20, 30, 50, 75,500, -1], [10, 20, 30, 50, 75,500, "All"]],
+    "aLengthMenu": [[10, 20, 30, 50, 75, 500, -1], [10, 20, 30, 50, 75, 500, "All"]],
     "pageLength": 500,
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
@@ -105,7 +105,7 @@ jQuery(document).ready(function () {
     "aLengthMenu": [[20, 30, 50, 75, -1], [20, 30, 50, 75, "All"]],
     "pageLength": 20,
     "ordering": false,
-    "order": [[0,'desc']],
+    "order": [[0, 'desc']],
     "dom": '<"row justify-content-between top-information"lf>rt<"row justify-content-between bottom-information"ip><"clear">'
   });
 });
@@ -160,7 +160,7 @@ $(function () {
   $('#for-home').DataTable({
     // dom: 'Bfrtip',
     scrollX: true,
-    searching: true,
+    scrollY: true,
   });
 
   $('#ForExport2').DataTable({
@@ -904,7 +904,7 @@ $(function () {
     });
   })
 
-  
+
   $('#editMail').on('show.bs.modal', function (event) {
     var button = $(event.relatedTarget) // Button that triggered the modal
     var recipient = button.data('whatever') // Extract info from data-* attributes

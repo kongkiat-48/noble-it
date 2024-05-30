@@ -241,7 +241,7 @@ require_once 'procress/save_service_it.php';
                                     <td>
                                         <?php
                                         echo '<a href="#" data-toggle="modal" data-target="#show_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-info" data-top="toptitle" data-placement="top" title="ตรวจสอบ"><i class="fa fa-search"></i></a>&nbsp';
-                                        if ($show_total->approve_department == 'HR' && $show_total->card_status == 'approve_workcheck') {
+                                        if ($show_total->approve_department == 'HR' || $show_total->card_status == 'approve_workcheck') {
                                             // echo '<a href="#" data-toggle="modal" data-target="#approve-hr" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
                                             echo '<a href="#" data-toggle="modal" data-target="#approve-hr" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-success btn-outline" data-top="toptitle" data-placement="top" title="ดำเนินการ"><i class="fa fa-check-circle"></i></a>';
                                         }

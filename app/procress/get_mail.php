@@ -1,29 +1,48 @@
 <?php
-// app/procress/get_mail.php
-require_once('PHPMailer/PHPMailerAutoload.php');
 
-function sendMail($runticket, $name_user, $department, $service, $problem, $other, $namecall, $location, $approve, $date_send) {
-    $mail = new PHPMailer();
-    $mail->isSMTP();
-    $mail->SMTPAuth = true;
-    $mail->SMTPSecure = "tls";
-    $mail->Host = 'mailnoble.nbrest.com';
-    $mail->Port = 25;
-    $mail->isHTML(true);
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+require 'vendor/autoload.php';
+
+$mail = new PHPMailer(true);
+
+try {
+    // Server settings
+    // $mail->SMTPDebug = 2;                                       // Enable verbose debug output
+    $mail->isSMTP();                                            // Set mailer to use SMTP
+    $mail->Host       = 'mailnoble.nbrest.com';                     // Specify main and backup SMTP servers
+    $mail->SMTPAuth   = true;                                   // Enable SMTP authentication
+    $mail->Username   = 'nbrit@nbrest.com';               // SMTP username
+    $mail->Password   = '21fb16Ss7';                        // SMTP password
+    $mail->SMTPSecure = 'tls';                                  // Enable TLS encryption, `ssl` also accepted
+    $mail->Port       = 587;                                    // TCP port to connect to
     $mail->CharSet = "utf-8";
-    $mail->Username = 'nbrit@nbrest.com';
-    $mail->Password = '21fb16Ss7';
-    $mail->AddCC('kongkiat.0174@hotmail.com');
-    $mail->FromName = "แจ้งการขอใช้บริการ IT";
-    $mail->Subject = "Ticket Number : " . $runticket;
-    $mail->Body = $name_user . "<br>แผนก : " . $department . "<br>" .
-                  "แจ้งปัญหาหมวดหมู่ของ : " . @prefixConvertorService($service) . "<br>" .
-                  "พบปัญาที่แจ้ง : " . @prefixConvertorServiceList($problem) . "<br>" .
-                  "รายละเอียด : " . $other . "<br>ผู้แจ้ง : " . $namecall . "<br>" .
-                  "สาขา : " . @prefixbranch($location) . "<br>ผู้อนุมัติ : " . $approve . "<br>" .
-                  "วันที่ : " . $date_send . "<br>Link : " . @urllink() . "<br>";
-    $mail->AddAddress('nbrit@nbrest.com', 'เจ้าหน้าที่ที่เกี่ยวข้อง');
+    // Recipients
+    $mail->setFrom('nbrit@nbrest.com', 'IT Service Support');
+    $mail->addAddress($mailDepartment, $toDepartment);
+    // $mail->addReplyTo('info@example.com', 'Information');
+    $mail->addCC('kongkiat.0174@gmail.com'); // หัวหน้า
+    $mail->addCC('nbrit@nbrest.com'); // ลูกน้อง
+    // CCTV
+    #$mail->addCC('nbrit@nbrest.com'); // ลูกน้อง
+    //
+    $mail->addBCC('nbrit@nbrest.com');
+    // $mail->addBCC('bcc@example.com');
 
-    return $mail->Send() ? 'Success' : 'Error';
+    // Attachments
+    // $mail->addAttachment('/var/tmp/file.tar.gz');             // Add attachments
+    // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');        // Optional name
+
+    // Content
+    $mail->isHTML(true);                                        // Set email format to HTML
+    $mail->Subject = 'Ticket Number: ' . $runticket;
+    $mail->Body    = $mail_text;
+    $mail->AltBody = strip_tags($mail_text);
+    // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+    $mail->send();
+    // echo 'Message has been sent';
+} catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
 }
-

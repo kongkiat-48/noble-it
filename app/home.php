@@ -107,8 +107,23 @@ echo @$alert;
                         </div>
                     </div>
                     <div class="form-group row">
+                        <div class="col-12">
+                            <label for="condition">ข้อมูลการแจ้งการแจ้ง</label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
                         <div class="col-6">
-                            <label for="namecall">ผู้แจ้ง</label>
+                            <input type="radio" name="case" id="case" value="me">
+                            <label for="">แจ้งสำหรับตนเอง</label>
+                        </div>
+                        <div class="col-6">
+                            <input type="radio" name="case" id="case" value="other">
+                            <label for="">แจ้งให้ผู้อื่น</label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-6">
+                            <label for="namecall" id="namecallLabel">เลือกชื่อผู้แจ้ง</label>
                             <!-- <input type="text" class="form-control input-sm" name="namecall" id="namecall" required> -->
                             <select name="namecall" id="namecall" class="form-control select2bs4" required style="width: 100%;">
                                 <option value="">--- เลือกข้อมูล ---</option>
@@ -119,11 +134,11 @@ echo @$alert;
                                 ?>
                             </select>
                             <div class="invalid-feedback">
-                                ระบุ ผู้แจ้ง.
+                                เลือก ข้อมูล.
                             </div>
                         </div>
                         <div class="col-6">
-                            <label for="location">สาขา</label>
+                            <label for="location" id="locationLabel">สาขา</label>
                             <select class="form-control select2bs4" style="width: 100%;" name="location" id="location" required>
                                 <option value="">--- เลือก สาขา ---</option>
                                 <?php
@@ -135,7 +150,7 @@ echo @$alert;
                             </select>
 
                             <div class="invalid-feedback">
-                                ระบุ สาขา.
+                                เลือก สาขา.
                             </div>
                         </div>
                     </div>
@@ -354,14 +369,7 @@ echo @$alert;
 
                 <ul class="nav nav-pills  px-3 px-xl-5 nav-style-border" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" id="it-tab" data-toggle="tab" href="#it" role="tab" aria-controls="it" aria-selected="false">ฝ่ายเทคโนโลยีสารสนเทศ</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="summary-tab" data-toggle="tab" href="#summary" role="tab" aria-controls="summary" aria-selected="false">
-                            ค้นหารายงานแจ้ง</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" id="settings-tab" data-toggle="tab" href="#settings" role="tab" aria-controls="settings" aria-selected="false">เปลี่ยนแปลงข้อมูล</a>
+                        <a class="nav-link active" id="it-tab" data-toggle="tab" href="#it" role="tab" aria-controls="it" aria-selected="false">Ticket ของฉัน</a>
                     </li>
                     <?php
                     $chkManager =  $getdata->my_sql_query($connect, NULL, "manager", "manager_user_key = '" . $userdata->user_key . "'");
@@ -545,69 +553,72 @@ echo @$alert;
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<hr class="sidebar-divider d-none d-md-block">
+<div class="card">
+    <div class="card-header">
+        <h5>Ticket ของทีม</h5>
+    </div>
+    <div class="card-body">
+        <div class="responsive-data-table-it">
+            <!-- <table id="responsive-data-table-it" class="table dt-responsive hover" style="width:100%"> -->
+            <table id="for-home" class="table dt-responsive display nowrap hover" style="font-family: sarabun; font-size: 14px; text-align: center;" width="100%">
+                <thead>
+                    <tr>
+                        <!-- <th>ลำดับ</th> -->
+                        <th>Tickets : </th>
+                        <th>ชื่อผู้แจ้ง : </th>
+                        <th>สาขา : </th>
+                        <th>วันที่แจ้ง : </th>
+                        <!-- <th>เวลา</th> -->
+                        <th>สถานะ : </th>
+                        <th>รายละเอียดการแจ้ง : </th>
+                        <!-- <th>ค่าใช้จ่าย</th> -->
+                        <th>วันที่แล้วเสร็จ : </th>
+                        <th>ผู้ดำเนินการ : </th>
+                        <th>ดำเนินการ : </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $i = 0;
+                    if ($_SESSION['uclass'] == 3 || $_SESSION['uclass'] == 2) {
+                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "ID AND (date LIKE '%" . date("Y") . "%' ) AND card_status != 'wait_approve' AND manager_approve_status != 'N' AND approve_department != 'HR' ORDER BY ticket DESC LIMIT 500 ");
+                    } else {
+                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "ID AND (date LIKE '%" . date("Y") . "%' ) AND user_key = '" . $_SESSION['ukey'] . "' OR manager_approve = '" . $_SESSION['ukey'] . "' OR se_namecall = '" . $_SESSION['ukey'] . "' AND card_status != 'wait_approve' AND manager_approve_status != 'N' ORDER BY ticket");
+                    }
 
-                    <div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab">
-                        <div class="mt-5">
-                            <div class="responsive-data-table-it">
-                                <!-- <table id="responsive-data-table-it" class="table dt-responsive hover" style="width:100%"> -->
-                                <table id="for-home" class="table dt-responsive nowrap hover" style="font-family: sarabun; font-size: 14px;
-    text-align: center;" width="100%">
-                                    <thead class="font-weight-bold text-center">
-                                        <tr>
-                                            <!-- <td>ลำดับ</td> -->
-                                            <td>Tickets : </td>
-                                            <td>ชื่อผู้แจ้ง : </td>
-                                            <td>สาขา : </td>
-                                            <td>วันที่แจ้ง : </td>
-                                            <!-- <td>เวลา</td> -->
-                                            <td>สถานะ : </td>
-                                            <td>รายละเอียดการแจ้ง : </td>
-                                            <!-- <td>ค่าใช้จ่าย</td> -->
-                                            <td>วันที่แล้วเสร็จ : </td>
-                                            <td>ผู้ดำเนินการ : </td>
-                                            <td>ดำเนินการ : </td>
+                    while ($show_total = mysqli_fetch_object($get_total)) {
+                        $i++;
+                    ?>
+                        <tr>
+                            <!-- <td><?php echo @$i; ?></td> -->
+                            <td><?php echo @$show_total->ticket; ?></td>
+
+                            <!-- <td><?php echo @getemployee($show_total->user_key); ?></td> -->
+                            <td>
+                                <!-- <?php echo $show_total->se_namecall; ?> -->
+                                <?php
+                                $search = $getdata->my_sql_query($connect, NULL, "employee", "card_key ='" . $show_total->se_namecall . "'");
+                                if (COUNT($search) == 0) {
+                                    $chkName = $show_total->se_namecall;
+                                } else {
+                                    $chkName = getemployee($show_total->se_namecall);
+                                }
+
+                                echo $chkName;
+                                ?>
+                            </td>
+                            <!-- <td><?php echo @getemployee_department($show_total->user_key); ?></td> -->
+                            <td><?php echo @prefixbranch($show_total->se_location); ?></td>
 
 
-
-
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <?php
-                                        $i = 0;
-                                        if ($_SESSION['uclass'] == 3 || $_SESSION['uclass'] == 2) {
-                                            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "ID AND (date LIKE '%" . date("Y") . "%' ) AND card_status != 'wait_approve' AND manager_approve_status != 'N' AND approve_department != 'HR' ORDER BY ticket DESC LIMIT 500 ");
-                                        } else {
-                                            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "ID AND (date LIKE '%" . date("Y") . "%' ) AND user_key = '" . $_SESSION['ukey'] . "' OR manager_approve = '" . $_SESSION['ukey'] . "' AND card_status != 'wait_approve' AND manager_approve_status != 'N' ORDER BY ticket");
-                                        }
-
-                                        while ($show_total = mysqli_fetch_object($get_total)) {
-                                            $i++;
-                                        ?>
-                                            <tr>
-                                                <!-- <td><?php echo @$i; ?></td> -->
-                                                <td><?php echo @$show_total->ticket; ?></td>
-
-                                                <!-- <td><?php echo @getemployee($show_total->user_key); ?></td> -->
-                                                <td>
-                                                    <!-- <?php echo $show_total->se_namecall; ?> -->
-                                                    <?php
-                                                    $search = $getdata->my_sql_query($connect, NULL, "employee", "card_key ='" . $show_total->se_namecall . "'");
-                                                    if (COUNT($search) == 0) {
-                                                        $chkName = $show_total->se_namecall;
-                                                    } else {
-                                                        $chkName = getemployee($show_total->se_namecall);
-                                                    }
-
-                                                    echo $chkName;
-                                                    ?>
-                                                </td>
-                                                <!-- <td><?php echo @getemployee_department($show_total->user_key); ?></td> -->
-                                                <td><?php echo @prefixbranch($show_total->se_location); ?></td>
-
-
-                                                <td><?php echo @dateConvertor($show_total->date); ?></td>
-                                                <!-- <td>
+                            <td><?php echo @dateConvertor($show_total->date); ?></td>
+                            <!-- <td>
                                                     <?php
                                                     if (@$show_total->time_start != NULL & @$show_total->time_start != "00:00:00") {
                                                         echo @$show_total->time_start;
@@ -617,42 +628,42 @@ echo @$alert;
                                                     ?>
                                                 </td> -->
 
-                                                <td class="text-center">
-                                                    <?php
-                                                    if ($show_total->se_id == '8' && $show_total->se_li_id == '154' && $show_total->manager_approve_status == 'Y' && $show_total->card_status == NULL) {
-                                                        echo '<span class="badge badge-info">รอ Support Manager อนุมัติ</span>';
-                                                    } else if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR') || $show_total->card_status == 'work_cctv' || $show_total->card_status == 'work_hr') {
-                                                        echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
-                                                    } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
-                                                        echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
-                                                    } else if ($show_total->card_status == NULL && $show_total->approve_department == 'HR') {
-                                                        echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
-                                                    } else if ($show_total->card_status == 'over_work') {
-                                                        echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
-                                                    } else if ($show_total->card_status == 'reject') {
-                                                        echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
-                                                    } else {
-                                                        if (in_array($show_total->card_status, ['2e34609794290a770cb0349119d78d21', 'fe8ae3ced9e7e738d78589bf6610c4da']) && $show_total->work_flag != 'work_success') {
-                                                            echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
-                                                        } else if ($show_total->card_status == 'approve_workcheck') {
-                                                            echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
-                                                        } else {
-                                                            if ($show_total->card_status == 'wait_approve') {
-                                                                echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
-                                                            } else if ($show_total->card_status == 'wait_checkwork') {
-                                                                echo '<span class="badge badge-primary">รอตรวจสอบงานเสร็จจากผู้แจ้ง</span>';
-                                                            } else {
-                                                                echo @cardStatus($show_total->card_status);
-                                                            }
-                                                        }
-                                                    }
+                            <td class="text-center">
+                                <?php
+                                if ($show_total->se_id == '8' && $show_total->se_li_id == '154' && $show_total->manager_approve_status == 'Y' && $show_total->card_status == NULL) {
+                                    echo '<span class="badge badge-info">รอ Support Manager อนุมัติ</span>';
+                                } else if (@$show_total->card_status == NULL && ($show_total->approve_department == 'IT' ||  $show_total->approve_department != 'HR') || $show_total->card_status == 'work_cctv' || $show_total->card_status == 'work_hr') {
+                                    echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                                } else if ($show_total->card_status == 'wait_approve' && $show_total->approve_department == 'IT') {
+                                    echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                                } else if ($show_total->card_status == NULL && $show_total->approve_department == 'HR') {
+                                    echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
+                                } else if ($show_total->card_status == 'over_work') {
+                                    echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
+                                } else if ($show_total->card_status == 'reject') {
+                                    echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
+                                } else {
+                                    if (in_array($show_total->card_status, ['2e34609794290a770cb0349119d78d21', 'fe8ae3ced9e7e738d78589bf6610c4da']) && $show_total->work_flag != 'work_success') {
+                                        echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
+                                    } else if ($show_total->card_status == 'approve_workcheck') {
+                                        echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
+                                    } else {
+                                        if ($show_total->card_status == 'wait_approve') {
+                                            echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                                        } else if ($show_total->card_status == 'wait_checkwork') {
+                                            echo '<span class="badge badge-primary">รอตรวจสอบงานเสร็จจากผู้แจ้ง</span>';
+                                        } else {
+                                            echo @cardStatus($show_total->card_status);
+                                        }
+                                    }
+                                }
 
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?php echo $show_total->se_other; ?>
-                                                </td>
-                                                <!-- <td>
+                                ?>
+                            </td>
+                            <td>
+                                <?php echo $show_total->se_other; ?>
+                            </td>
+                            <!-- <td>
                                                     <?php
                                                     if ($show_total->se_price != NULL) {
                                                         echo $show_total->se_price;
@@ -661,120 +672,61 @@ echo @$alert;
                                                     }
                                                     ?>
                                                 </td> -->
-                                                <td class="text-center">
-                                                    <?php
-                                                    if ($show_total->date_update != "0000-00-00" && $show_total->card_status != "57995055c28df9e82476a54f852bd214") {
-                                                        echo @dateConvertor($show_total->date_update);
-                                                    } elseif ($show_total->card_status == "57995055c28df9e82476a54f852bd214") {
-                                                        echo @cardStatus($show_total->card_status);
-                                                    } else {
-                                                        echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
-                                                    }
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?php
-                                                    if ($show_total->card_status == 'wait_checkwork') {
-                                                        echo '<span class="badge badge-primary">รอตรวจสอบงานเสร็จจากผู้แจ้ง</span>';
-                                                    }else if (@$show_total->admin_update == NULL && $show_total->card_status != "57995055c28df9e82476a54f852bd214") {
-                                                        echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
-                                                    } else if ($show_total->card_status == "57995055c28df9e82476a54f852bd214") {
-                                                        echo @cardStatus($show_total->card_status);
-                                                    } else if ($show_total->se_id == '8' && $show_total->se_li_id == '154' && $show_total->manager_approve_status == 'Y' && $show_total->work_flag != 'work_success') {
-                                                        echo '<span class="badge badge-info">รอ Support Manager อนุมัติ</span>';
-                                                    } else {
-                                                        echo @getemployee($show_total->admin_update);
-                                                    }
+                            <td class="text-center">
+                                <?php
+                                if ($show_total->date_update != "0000-00-00" && $show_total->card_status != "57995055c28df9e82476a54f852bd214") {
+                                    echo @dateConvertor($show_total->date_update);
+                                } elseif ($show_total->card_status == "57995055c28df9e82476a54f852bd214") {
+                                    echo @cardStatus($show_total->card_status);
+                                } else {
+                                    echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <?php
+                                if ($show_total->card_status == 'wait_checkwork') {
+                                    echo '<span class="badge badge-primary">รอตรวจสอบงานเสร็จจากผู้แจ้ง</span>';
+                                } else if (@$show_total->admin_update == NULL && $show_total->card_status != "57995055c28df9e82476a54f852bd214") {
+                                    echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                                } else if ($show_total->card_status == "57995055c28df9e82476a54f852bd214") {
+                                    echo @cardStatus($show_total->card_status);
+                                } else if ($show_total->se_id == '8' && $show_total->se_li_id == '154' && $show_total->manager_approve_status == 'Y' && $show_total->work_flag != 'work_success') {
+                                    echo '<span class="badge badge-info">รอ Support Manager อนุมัติ</span>';
+                                } else {
+                                    echo @getemployee($show_total->admin_update);
+                                }
 
-                                                    ?>
-                                                </td>
-                                                <td>
-                                                    <?php
-                                                    if ($_SESSION['uclass'] == 1 && $show_total->card_status == 'wait_checkwork' && $show_total->user_key == $_SESSION['ukey']) {
-                                                        // echo '<a href="#" data-toggle="modal" data-target="#check_work_user" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning" title="ตรวจสอบงาน"><i class="fa fa-edit"></i></a>&nbsp';
-                                                        echo '<a href="#" data-toggle="modal" data-target="#check_work_user" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning  btn-outline" title="ดำเนินการ"><i class="fa fa-edit"></i></a>';
-                                                    }
-                                                    ?>
-                                                    <?php
-                                                    echo '<a href="#" data-toggle="modal" data-target="#show_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-info" title="ตรวจสอบ"><i class="fa fa-search"></i></a>&nbsp';
-                                                    echo '<a href="?p=case_all_service&key=' . @$show_total->ticket . '" class="btn btn-sm btn-success" title="ประวัติดำเนินงาน"><span class="fa fa-list-ul"></span></a>&nbsp';
-                                                    ?>
-                                                    <a href="service/print_work.php?key=<?php echo @$show_total->ticket; ?>" target="_blank" class="btn btn-sm btn-outline-danger" title="พิมพ์ใบงาน"><i class="fa fa-print"></i></a>
-                                                    <?php if ($_SESSION['uclass'] == '3' || $_SESSION['uclass'] == '2') {
-                                                        if ($show_total->card_status != '2376b33c92767c1437421a99bbc7164f') {
-                                                            echo '<a href="#" data-toggle="modal" data-target="#edit_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-secondary  btn-outline" title="ดำเนินการ"><i class="fa fa-edit"></i></a>';
-                                                        }
-                                                    }
-                                                    ?>
-                                                </td>
+                                ?>
+                            </td>
+                            <td>
+                                <?php
+                                if ($_SESSION['uclass'] == 1 && $show_total->card_status == 'wait_checkwork' && ($show_total->user_key == $_SESSION['ukey'] || $show_total->se_namecall == $_SESSION['ukey'])) {
+                                    // echo '<a href="#" data-toggle="modal" data-target="#check_work_user" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning" title="ตรวจสอบงาน"><i class="fa fa-edit"></i></a>&nbsp';
+                                    echo '<a href="#" data-toggle="modal" data-target="#check_work_user" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning  btn-outline" title="ดำเนินการ"><i class="fa fa-edit"></i></a>';
+                                }
+                                ?>
+                                <?php
+                                echo '<a href="#" data-toggle="modal" data-target="#show_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-info" title="ตรวจสอบ"><i class="fa fa-search"></i></a>&nbsp';
+                                echo '<a href="?p=case_all_service&key=' . @$show_total->ticket . '" class="btn btn-sm btn-success" title="ประวัติดำเนินงาน"><span class="fa fa-list-ul"></span></a>&nbsp';
+                                ?>
+                                <a href="service/print_work.php?key=<?php echo @$show_total->ticket; ?>" target="_blank" class="btn btn-sm btn-outline-danger" title="พิมพ์ใบงาน"><i class="fa fa-print"></i></a>
+                                <?php if ($_SESSION['uclass'] == '3' || $_SESSION['uclass'] == '2') {
+                                    if ($show_total->card_status != '2376b33c92767c1437421a99bbc7164f') {
+                                        echo '<a href="#" data-toggle="modal" data-target="#edit_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-secondary  btn-outline" title="ดำเนินการ"><i class="fa fa-edit"></i></a>';
+                                    }
+                                }
+                                ?>
+                            </td>
 
 
 
-                                            </tr>
-                                        <?php
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tab-pane fade" id="settings" role="tabpanel" aria-labelledby="settings-tab">
-                        <div class="mt-5">
-                            <form method="post" enctype="multipart/form-data">
-
-                                <div class="row mb-2">
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="firstName">ชื่อ</label>
-                                            <input type="text" class="form-control" id="firstName" value="<?php echo @$userdata->name; ?>" disabled>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-lg-6">
-                                        <div class="form-group">
-                                            <label for="lastName">นามสกุล</label>
-                                            <input type="text" class="form-control" id="lastName" value="<?php echo @$userdata->lastname; ?>" disabled>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="form-group mb-4">
-                                    <label for="userName">User ID</label>
-                                    <input type="text" class="form-control" id="userName" value="<?php echo @$userdata->username; ?>" disabled>
-                                </div>
-
-                                <div class="form-group mb-4">
-                                    <label for="email">Email</label>
-                                    <input type="email" class="form-control" name="email" id="email" value="<?php echo @$userdata->email; ?>">
-                                </div>
-
-                                <div class="form-group mb-4">
-                                    <label for="old_password">Old password</label>
-                                    <input type="password" class="form-control" name="old_password" id="old_password">
-                                </div>
-
-                                <div class="form-group mb-4">
-                                    <label for="new_password">New password</label>
-                                    <input type="password" class="form-control" name="new_password" id="new_password">
-                                </div>
-
-                                <div class="form-group mb-4">
-                                    <label for="re_new_password">Confirm password</label>
-                                    <input type="password" class="form-control" name="re_new_password" id="re_new_password">
-                                </div>
-
-                                <div class="d-flex justify-content-end mt-5">
-                                    <button type="submit" class="btn btn-outline-primary mb-2 btn-pill" name="password_edit"><span class="fas fa-key"></span> Update Password</button>&nbsp;
-                                    <button type="submit" class="btn btn-outline-warning mb-2 btn-pill" name="email_edit"><span class="fas fa-envelope"></span> Update Email</button>
-                                </div>
-
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </tr>
+                    <?php
+                    }
+                    ?>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -827,6 +779,21 @@ echo @$alert;
                 },
                 error: function(err) {
                     console.log(err);
+                }
+            });
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // เรียกฟังก์ชันเมื่อมีการเปลี่ยนแปลงใน radio buttons
+        document.querySelectorAll('input[type=radio][name="case"]').forEach(function(radio) {
+            radio.addEventListener('change', function() {
+                if (this.value === 'me') {
+                    document.getElementById('namecallLabel').innerText = 'เลือกชื่อผู้แจ้ง';
+                    document.getElementById('locationLabel').innerText = 'สาขา';
+                } else if (this.value === 'other') {
+                    document.getElementById('namecallLabel').innerText = 'เลือกชื่อผู้ที่จะแจ้งให้';
+                    document.getElementById('locationLabel').innerText = 'สาขาที่จะแจ้ง';
                 }
             });
         });

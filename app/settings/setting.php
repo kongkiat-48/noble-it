@@ -20,7 +20,7 @@
   </div>
   <div class="card-body">
     <a href="?p=view_info" class="btn btn-primary mt-1"><i class="fa fa-user fa-fw fa-6x"></i><br><br>ข้อมูลส่วนตัว</a>
-    <a href="?p=setting_info" class="btn btn-warning mt-1"><i class="fa fa-key fa-fw fa-6x"></i><br><br>เปลี่ยนแปลงรหัสผ่าน</a>
+    <!-- <a href="?p=setting_info" class="btn btn-warning mt-1"><i class="fa fa-key fa-fw fa-6x"></i><br><br>เปลี่ยนแปลงรหัสผ่าน</a> -->
   </div>
 </div><br>
 <?php

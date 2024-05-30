@@ -49,7 +49,16 @@ if ($getcontrol < 999) {
             //     time_start = '" . date("H:i:s") . "'");
             // } else {
             $getApproveDep = in_array($_POST['se_id'], ['13', '16']) ? 'HR' : 'IT';
-            $chkManager =  $getdata->my_sql_query($connect, NULL, "manager", "user_key = '" . $_SESSION['ukey'] . "'");
+            if ($_POST['case'] == 'me') {
+                $chkManager =  $getdata->my_sql_query($connect, NULL, "manager", "user_key = '" . $_SESSION['ukey'] . "'");
+            } else if ($_POST['case'] == 'other') {
+                $chkManager =  $getdata->my_sql_query($connect, NULL, "manager", "user_key = '" . $_POST['namecall'] . "'");
+            } else {
+                $chkManager =  $getdata->my_sql_query($connect, NULL, "manager", "user_key = '" . $_SESSION['ukey'] . "'");
+            }
+
+            $mailManager =  $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $chkManager->manager_user_key . "'");
+
             // echo $chkManager->manager_user_key; 13 16
             if (COUNT($chkManager) == 0) {
                 $getdata->my_sql_insert($connect, "problem_list", "
@@ -109,6 +118,7 @@ if ($getcontrol < 999) {
             $date_send = date('d/m/Y');
 
             $line_token = $getalert->alert_line_token; // Token
+            $mailMu = $chkManager->manager_user_key;
             $line_text = "
 ------------------------
 Ticket : {$runticket}
@@ -126,11 +136,125 @@ Ticket : {$runticket}
             
 วันที่ : {$date_send}
 Link : " . @urllink() . "
+--------
+mailM : ".$mailMu."
+mailU : ".$_SESSION['emailuser']."
 ";
+
+
+if($getApproveDep == 'HR'){
+    $mailDepartment = 'kongkiat.0174@hotmail.com';
+    $toDepartment = 'ฝ่าย Human Resource';
+} else {
+    $mailDepartment = 'nbrit@nbrest.com';
+    $toDepartment = 'ฝ่าย IT Support';
+}
+$mail_text = "
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+        }
+        .container {
+            margin: 20px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .header, .footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #007BFF;
+            color: white;
+            border-radius: 5px;
+        }
+        .content {
+            margin: 20px 0;
+        }
+        .section {
+            margin-bottom: 15px;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .value {
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class='container'>
+        <div class='header'>
+            <h2>Ticket Information</h2>
+        </div>
+        <div class='content'>
+            <div class='section'>
+                <div class='section-title'>Ticket:</div>
+                <div class='value'>{$runticket}</div>
+            </div>
+            <div class='section'>
+                <div class='section-title'>Name:</div>
+                <div class='value'>{$name_user}</div>
+            </div>
+            <div class='section'>
+                <div class='section-title'>Department:</div>
+                <div class='value'>{$department}</div>
+            </div>
+            <div class='section'>
+                <div class='section-title'>Caller:</div>
+                <div class='value'>{$namecall}</div>
+            </div>
+            <div class='section'>
+                <div class='section-title'>Branch:</div>
+                <div class='value'>" . @prefixbranch($location) . "</div>
+            </div>
+            <div class='section'>
+                <div class='section-title'>Approver:</div>
+                <div class='value'>{$approve}</div>
+            </div>
+            <div class='section'>
+                <div class='section-title'>Asset Code:</div>
+                <div class='value'>{$asset}</div>
+            </div>
+            <div class='section'>
+                <div class='section-title'>Category:</div>
+                <div class='value'>" . @prefixConvertorService($service) . "</div>
+            </div>
+            <div class='section'>
+                <div class='section-title'>Item:</div>
+                <div class='value'>" . prefixConvertorServiceList($problem) . "</div>
+            </div>
+            <div class='section'>
+                <div class='section-title'>Problem Found:</div>
+                <div class='value'>{$other}</div>
+            </div>
+            <div class='section'>
+                <div class='section-title'>Date:</div>
+                <div class='value'>{$date_send}</div>
+            </div>
+            <div class='section'>
+                <div class='section-title'>Link:</div>
+                <div class='value'>" . @urllink() . "</div>
+            </div>
+        </div>
+        <div class='footer'>
+            <p>Thank you</p>
+        </div>
+    </div>
+</body>
+</html>
+";
+
+
 
             lineNotify($line_text, $line_token); // เรียกใช้ Functions line
             //echo "<META HTTP-EQUIV='Refresh' CONTENT = '1; URL='" . $SERVER_NAME . "'>";
-            require_once 'get_mail.php';
+            // require_once 'get_mail.php';
             $alert = $success;
         } else {
             $alert = $warning;

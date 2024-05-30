@@ -17,7 +17,7 @@ date_default_timezone_set('Asia/Bangkok');
 
 <?php
 $i = 0;
-$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "(card_status is null or card_status != '57995055c28df9e82476a54f852bd214') AND user_key = '" . $_SESSION['ukey'] . "'ORDER BY ticket DESC LIMIT 30");
+$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "(card_status is null or card_status != '57995055c28df9e82476a54f852bd214') AND (user_key = '" . $_SESSION['ukey'] . "' OR se_namecall = '" . $_SESSION['ukey'] . "') ORDER BY ticket DESC LIMIT 30");
 while ($show_total = mysqli_fetch_object($get_total)) {
     $i++;
 ?>

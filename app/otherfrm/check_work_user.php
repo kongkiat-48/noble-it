@@ -31,6 +31,94 @@ $chk_case = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='" . 
             </div>
         </div>
     </div>
+    <div class="form-group row">
+        <div class="col-12">
+            <label for="comment">รายละเอียดเพิ่มเติม</label>
+            <?php
+            if ($_SESSION['uclass'] != 1) {
+                echo '<textarea class="form-control" name="comment" id="comment"></textarea>';
+            } else {
+                echo '<textarea class="form-control" name="comment" id="comment" required></textarea>';
+            }
+            ?>
+            <div class="invalid-feedback">
+                ระบุ รายละเอียด.
+            </div>
+        </div>
+    </div>
+    <hr class="sidebar-divider d-none d-md-block">
+    <div class="form-group row">
+        <div class="col-12">
+            <label for="se_asset">รหัสสินทรัพย์</label>
+            <input type="text" name="se_asset" id="se_asset" class="form-control" readonly value="<?php echo $chk_case->se_asset; ?>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-md-6 col-sm-12">
+            <label for="service">หมวดหมู่</label>
+            <select name="" id="" class="form-control" disabled>
+                <?php
+                $select_service = $getdata->my_sql_select($connect, NULL, "service", "se_id");
+                while ($show_service = mysqli_fetch_object($select_service)) {
+                    if ($show_service->se_id == $chk_case->se_id) {
+                        echo '<option value="' . $show_service->se_id . '">' . $show_service->se_name . '</option>';
+                    }
+                }
+                ?>
+            </select>
+        </div>
+
+        <div class="col-md-6 col-sm-12">
+            <label for="service_list">ปัญหาที่พบ</label>
+            <select name="" id="" class="form-control" disabled>
+                <?php
+                $select_service_list = $getdata->my_sql_select($connect, NULL, "service_list", "se_li_id");
+                while ($show_service_list = mysqli_fetch_object($select_service_list)) {
+                    if ($show_service_list->se_li_id == $chk_case->se_li_id) {
+                        echo '<option value="' . $show_service_list->se_li_id . '">' . $show_service_list->se_li_name . '</option>';
+                    }
+                }
+                ?>
+            </select>
+        </div>
+
+    </div>
+    <?php
+    if ($chk_case->se_other != NULL) { ?>
+        <div class="form-group row">
+
+            <div class="col-12">
+                <label for="other">เพิ่มเติม</label>
+                <textarea name="other" id="other" class="form-control" readonly><?php echo $chk_case->se_other; ?></textarea>
+            </div>
+
+        </div>
+    <?php } ?>
+
+    <div class="form-group row">
+        <div class="col-md-6 col-sm-12">
+            <label for="namecall">ชื่อผู้แจ้ง</label>
+            <?php
+            $search = $getdata->my_sql_query($connect, NULL, "employee", "card_key ='" . $chk_case->se_namecall . "'");
+            if (COUNT($search) == 0) {
+                $chkName = $chk_case->se_namecall;
+            } else {
+                $chkName = getemployee($chk_case->se_namecall);
+            }
+            ?>
+            <input type="text" name="namecall" id="namecall" class="form-control" readonly value="<?php echo $chkName; ?>">
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <label for="location">สาขา</label>
+            <input type="text" name="location" id="location" class="form-control" readonly value="<?php echo @prefixbranch($chk_case->se_location); ?>">
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-12">
+            <label for="approve">ผู้อนุมัติ</label>
+            <input type="text" class="form-control" name="approve" id="approve" readonly value="<?php echo $chk_case->se_approve; ?>">
+        </div>
+    </div>
 
 </div>
 <input type="text" hidden name="card_key" id="card_key" value="<?php echo @htmlspecialchars($_GET['key']); ?>">

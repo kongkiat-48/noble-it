@@ -41,12 +41,12 @@ $stmt->execute();
 
   <?php require '../core/header.php' ?>
 
-  <script>
+  <!-- <script>
     NProgress.configure({
       showSpinner: true
     });
     NProgress.start();
-  </script>
+  </script> -->
   <script>
     setInterval(function() {
       $('#sidebar-menus').load('auto/menu.php');
@@ -68,6 +68,15 @@ $stmt->execute();
 
     .logo-fill-blue {
       fill: #7dffb6;
+    }
+    
+    .field-icon {
+      float: right;
+      margin-left: -25px;
+      margin-top: -25px;
+      position: relative;
+      z-index: 2;
+      margin-right: 10px;
     }
   </style>
 
@@ -100,22 +109,17 @@ $stmt->execute();
             while ($showmenus = mysqli_fetch_object($getmenus)) {
 
               if ($_GET['p'] == $showmenus->menu_case) {
-                $show = '
-<li class="has-sub active"> <a class="sidenav-item-link" href="' . $showmenus->menu_link . '">
-
-<i class="fas ' . $showmenus->menu_icon . '"></i><span>' . $showmenus->menu_name . '</span></a>
-</li>';
+                $show = '<li class="has-sub active"> <a class="sidenav-item-link" href="' . $showmenus->menu_link . '">
+                <i class="fas ' . $showmenus->menu_icon . '"></i><span>' . $showmenus->menu_name . '</span></a></li>';
                 echo @accessMenus($showmenus->menu_key, $_SESSION['ukey'], $show);
               } else {
-                $show = '
-                <li class="has-sub"> <a class="sidenav-item-link" href="' . $showmenus->menu_link . '">
-                
-                <i class="fas ' . $showmenus->menu_icon . '"></i><span>' . $showmenus->menu_name . '</span></a>
-                </li>';
+                $show = '<li class="has-sub"> <a class="sidenav-item-link" href="' . $showmenus->menu_link . '">
+                <i class="fas ' . $showmenus->menu_icon . '"></i><span>' . $showmenus->menu_name . '</span></a></li>';
                 echo @accessMenus($showmenus->menu_key, $_SESSION['ukey'], $show);
               }
             }
             ?>
+            <li class="has-sub"> <a class="sidenav-item-link" target="_blank" href="https://mts.nbrest.com/app/index.php"><i class="fas fa-link"></i><span>แจ้งปัญหาฝ่ายช่าง</span></a></li>
           </ul>
 
 
@@ -150,47 +154,6 @@ $stmt->execute();
 
           <div class="navbar-right ">
             <ul class="nav navbar-nav">
-              <li class="dropdown notifications-menu">
-                <button class="dropdown-toggle" data-toggle="dropdown">
-                  <i class="fas fa-bell"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-right">
-                  <li class="dropdown-header">You have 1 notifications</li>
-                  <li>
-                    <a href="#">
-                      <i class="mdi mdi-text-to-speech"></i> New user registered
-                      <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 10 AM</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="mdi mdi-account-remove"></i> User deleted
-                      <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 07 AM</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="mdi mdi-chart-areaspline"></i> Sales report is ready
-                      <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 12 PM</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="mdi mdi-account-supervisor"></i> New client
-                      <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 10 AM</span>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="mdi mdi-server-network-off"></i> Server overloaded
-                      <span class=" font-size-12 d-inline-block float-right"><i class="mdi mdi-clock-outline"></i> 05 AM</span>
-                    </a>
-                  </li>
-                  <li class="dropdown-footer">
-                    <a class="text-center" href="#"> View All </a>
-                  </li>
-                </ul>
-              </li>
               <!-- User Account -->
               <li class="dropdown user-menu">
                 <button href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
@@ -205,7 +168,9 @@ $stmt->execute();
                       <?php echo @$userdata->name . '&nbsp;' . $userdata->lastname; ?><small class="pt-1"><?php echo @$userdata->email; ?></small>
                     </div>
                   </li>
-
+                  <li>
+                    <a href="?p=view_info"> <i class="mdi mdi-account-edit"></i> เปลี่ยนแปลงข้อมูล </a>
+                  </li>
                   <li>
                     <a href="../core/logout.core.php"> <i class="mdi mdi-logout"></i> Log Out </a>
                   </li>
@@ -316,6 +281,12 @@ $stmt->execute();
     }
 
     showTime();
+
+    $(".old_password, .new_password, .conf_password").click(function() {
+      $(this).toggleClass("fa-eye fa-eye-slash");
+      var input = $($(this).attr("toggle"));
+      input.attr("type", input.attr("type") === "password" ? "text" : "password");
+    });
   </script>
 </body>
 
