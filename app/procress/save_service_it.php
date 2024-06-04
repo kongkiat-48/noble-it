@@ -137,19 +137,19 @@ Ticket : {$runticket}
 วันที่ : {$date_send}
 Link : " . @urllink() . "
 --------
-mailM : ".$mailMu."
-mailU : ".$_SESSION['emailuser']."
+mailM : " . $mailMu . "
+mailU : " . $_SESSION['emailuser'] . "
 ";
 
 
-if($getApproveDep == 'HR'){
-    $mailDepartment = 'kongkiat.0174@hotmail.com';
-    $toDepartment = 'ฝ่าย Human Resource';
-} else {
-    $mailDepartment = 'nbrit@nbrest.com';
-    $toDepartment = 'ฝ่าย IT Support';
-}
-$mail_text = "
+            if ($getApproveDep == 'HR') {
+                $mailDepartment = 'kongkiat.0174@hotmail.com';
+                $toDepartment = 'ฝ่าย Human Resource';
+            } else {
+                $mailDepartment = 'nbrit@nbrest.com';
+                $toDepartment = 'ฝ่าย IT Support';
+            }
+            $mail_text = "
 <!DOCTYPE html>
 <html>
 <head>
@@ -658,8 +658,67 @@ if (isset($_POST['save_approve_hr'])) {
          Ticket : $ticket
          ------------------------
          ผู้ดำเนินการ : $name_admin
-         สถานะ :  " . @cardStatus_for_line($status) . " 
+         สถานะ :  อนุมัติจาก HR
          ผู้แจ้ง : " . @getemployee($namecall) . "
+         สาขา : $location
+         รายละเอียด : $detail
+         ------------------------
+         วันที่: {$date_send}
+         เวลา: {$time_send}
+         ";
+
+        lineNotify($line_text, $line_token); // เรียกใช้ Functions line
+
+        $alert = $success;
+    }
+}
+
+if (isset($_POST['save_reopen_case'])) {
+    if (!empty($_POST['reopen_case'])) {
+        if ($_POST['reopen_case'] == 'Y') {
+            $getFlag = "wait_approve";
+            $status = 'แจ้งดำเนินงานจากผู้ใช้งานอีกครั้ง';
+            $detail = $_POST['comment'] . ' - ' . $status;
+            $work_flag = 'work_success';
+        }
+        $getdata->my_sql_update(
+            $connect,
+            "problem_list",
+            "card_status='" . $getFlag . "',
+            work_flag = '" . $work_flag . "'",
+
+            "ticket='" . htmlspecialchars($_POST['card_key']) . "'"
+        );
+
+        $getdata->my_sql_insert(
+            $connect,
+            "problem_comment",
+            "card_status='" . $getFlag . "',
+      admin_update='" . $name_key . "',
+      comment='" . $detail . "',
+      date ='" . date("Y-m-d H:i:s") . "',
+      ticket='" . htmlspecialchars($_POST['card_key']) . "'"
+        );
+
+
+        // ส่งข้อมูลเข้าไลน์
+        $ticket = $_POST['ticket'];
+        $name_admin = $_POST['admin'];
+
+        // $status = $_POST['off_case_status'];
+        $date_send = date('d/m/Y');
+        $time_send = date("H:i");
+        $namecall = $_POST['namecall'];
+        $location = $_POST['location'];
+        $detail = $_POST['detail'];
+        $line_token = $getalert->alert_line_token; // Token
+        $line_text = "
+         /*** " . $status . " ***/
+         ------------------------
+         Ticket : $ticket
+         ------------------------
+         สถานะ :  $status 
+         ผู้แจ้ง : " . $namecall . "
          สาขา : $location
          รายละเอียด : $detail
          ------------------------

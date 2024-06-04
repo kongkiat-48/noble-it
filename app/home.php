@@ -334,6 +334,31 @@ echo @$alert;
     </div>
 </div>
 
+<div class="modal fade" id="reopen_case" role="dialog" aria-labelledby="reopen_case" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate id="waitsave">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">แจ้งงานใหม่อีกครั้ง</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="reopen_case">
+
+                </div>
+                <div class="modal-footer">
+
+                    <button class="ladda-button btn btn-primary btn-square btn-ladda bg-info" type="submit" name="save_reopen_case" data-style="expand-left">
+                        <span class="fas fa-save"> บันทึก</span>
+                        <span class="ladda-spinner"></span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 
 <div class="bg-white border rounded">
     <div class="row no-gutters">
@@ -587,7 +612,7 @@ echo @$alert;
                     <?php
                     $i = 0;
                     if ($_SESSION['uclass'] == 3 || $_SESSION['uclass'] == 2) {
-                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "ID AND (date LIKE '%" . date("Y") . "%' ) AND card_status != 'wait_approve' AND manager_approve_status != 'N' AND approve_department != 'HR' ORDER BY ticket DESC LIMIT 500 ");
+                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "ID AND (date LIKE '%" . date("Y") . "%' ) AND card_status != 'wait_approve' AND manager_approve_status != 'N' AND approve_department != 'HR' AND (user_key = '" . $_SESSION['ukey'] . "' OR manager_approve = '" . $_SESSION['ukey'] . "' OR se_namecall = '" . $_SESSION['ukey'] . "') ORDER BY ticket DESC LIMIT 500 ");
                     } else {
                         $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "ID AND (date LIKE '%" . date("Y") . "%' ) AND user_key = '" . $_SESSION['ukey'] . "' OR manager_approve = '" . $_SESSION['ukey'] . "' OR se_namecall = '" . $_SESSION['ukey'] . "' AND card_status != 'wait_approve' AND manager_approve_status != 'N' ORDER BY ticket");
                     }
@@ -706,6 +731,9 @@ echo @$alert;
                                     echo '<a href="#" data-toggle="modal" data-target="#check_work_user" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-warning  btn-outline" title="ดำเนินการ"><i class="fa fa-edit"></i></a>';
                                 }
                                 ?>
+                                <?php if ($show_total->card_status == '57995055c28df9e82476a54f852bd214') {
+                                    echo '<a href="#" data-toggle="modal" data-target="#reopen_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-danger  btn-outline" title="แจ้งงานอีกครั้ง"><i class="fa fa-retweet"></i></a>';
+                                } ?>
                                 <?php
                                 echo '<a href="#" data-toggle="modal" data-target="#show_case" data-whatever="' . @$show_total->ticket . '" class="btn btn-sm btn-info" title="ตรวจสอบ"><i class="fa fa-search"></i></a>&nbsp';
                                 echo '<a href="?p=case_all_service&key=' . @$show_total->ticket . '" class="btn btn-sm btn-success" title="ประวัติดำเนินงาน"><span class="fa fa-list-ul"></span></a>&nbsp';
@@ -717,6 +745,7 @@ echo @$alert;
                                     }
                                 }
                                 ?>
+
                             </td>
 
 
@@ -763,6 +792,28 @@ echo @$alert;
                 }
             });
         });
+
+        $('#reopen_case').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+            var recipient = button.data('whatever') // Extract info from data-* attributes
+            var modal = $(this);
+            var dataString = 'key=' + recipient;
+
+            $.ajax({
+                type: "GET",
+                url: "otherfrm/reopen_case.php",
+                data: dataString,
+                cache: false,
+                success: function(data) {
+                    modal.find('.reopen_case').html(data);
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+        });
+
+
         $('#approve-frm-cctv').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget) // Button that triggered the modal
             var recipient = button.data('whatever') // Extract info from data-* attributes
