@@ -91,7 +91,7 @@ date_default_timezone_set('Asia/Bangkok');
           <div class="card-header text-center" style="background: <?php echo @$system_info->site_color_form; ?>;">
 
             <img src="resource/system/logo/<?php echo @$system_info->site_logo; ?>" width="150" alt="" class="mb-2" />
-            <h3 style="color: <?php echo @$system_info->site_color_name; ?>;"><strong><?php echo @$system_info->site_name; ?></strong> </h3>
+            <h3 style="color: blanchedalmond;"><strong><?php echo @$system_info->site_name; ?></strong> </h3>
           </div>
           <div class="card-body p-3">
             <?php

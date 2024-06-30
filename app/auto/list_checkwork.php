@@ -23,7 +23,7 @@ while ($show_total = mysqli_fetch_object($get_total)) {
 ?>
     <tr>
         <td><?php echo @$i; ?></td>
-        <td><a href="#" data-toggle="modal" data-target="#" data-whatever="<?php echo @$show_total->ticket; ?>" class="btn btn-sm btn-outline-info"><?php echo @$show_total->ticket; ?></a></td>
+        <td><a href="#" data-toggle="modal" data-target="#show_case" data-whatever="<?php echo @$show_total->ticket; ?>" class="btn btn-sm btn-outline-info"><?php echo @$show_total->ticket; ?></a></td>
         <td><?php echo @dateConvertor($show_total->date); ?></td>
         <td><?php echo $show_total->time_start; ?></td>
         <td>

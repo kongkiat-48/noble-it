@@ -32,7 +32,7 @@ require 'inc_file.php';
         </div>
         <div class="media-body align-self-center">
             <h4 class="mb-2"><?php $a = NULL;
-                                            @$getwait = $getdata->my_sql_show_rows($connect, "problem_list", "user_key = '" . $_SESSION['ukey'] . "' AND (date_update = '0000-00-00' OR card_status = '5cafc78523f4f5e4812f9545b2ba5ae7') AND (date LIKE '%" . date("Y-m") . "%' )");
+                                            @$getwait = $getdata->my_sql_show_rows($connect, "problem_list", "user_key = '" . $_SESSION['ukey'] . "' AND (date_update = '0000-00-00' OR card_status IN ('wait_approve','reject')) AND (date LIKE '%" . date("Y-m") . "%' )");
                                             echo @number_format($getwait); ?></h4>
             <p>Wait</p>
         </div>
@@ -46,7 +46,7 @@ require 'inc_file.php';
         </div>
         <div class="media-body align-self-center">
             <h4 class="mb-2"><?php $a = NULL;
-                                            @$getwait = $getdata->my_sql_show_rows($connect, "problem_list", "user_key = '" . $_SESSION['ukey'] . "' AND (card_status = '57995055c28df9e82476a54f852bd214') AND (date LIKE '%" . date("Y-m") . "%' )");
+                                            @$getwait = $getdata->my_sql_show_rows($connect, "problem_list", "user_key = '" . $_SESSION['ukey'] . "' AND (card_status = '') AND (date LIKE '%" . date("Y-m") . "%' )");
                                             echo @number_format($getwait); ?></h4>
             <p>Cancel</p>
         </div>

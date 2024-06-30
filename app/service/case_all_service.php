@@ -58,18 +58,22 @@ $card_detail = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='"
               <!-- <td align="center"><?php echo $showcard_status->card_status != null ? @cardStatus($showcard_status->card_status) : '<span class="badge badge-warning" style="color:#FFF;">สถานะขออนุมัติ</span>'; ?></td> -->
               <td>
                 <?php
-                if (@$showcard_status->card_status == NULL && ($showcard_status->approve_department == 'IT' ||  $showcard_status->approve_department != 'HR')) {
+                if (@$showcard_status->card_status == 'approve_mg' || $showcard_status->card_status == 'work_cctv' || $showcard_status->card_status == 'work_hr') {
                   echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
-                } else if ($showcard_status->card_status == 'wait_approve' && $showcard_status->approve_department == 'IT') {
+                } else if ($showcard_status->card_status == 'wait_approve') {
                   echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
-                } else if ($showcard_status->card_status == NULL && $showcard_status->approve_department == 'HR') {
+                } else if ($showcard_status->card_status  == 'wait_approve_hr') {
                   echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
                 } else if ($showcard_status->card_status == 'over_work') {
                   echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
                 } else if ($showcard_status->card_status == 'reject') {
                   echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
-                } else {
-                  if ($showcard_status->card_status == 'approve_workcheck') {
+                } else if ($showcard_status->card_status == null) {
+                  echo '<span class="badge badge-danger">ยกเลิกงานโดยผู้แจ้ง</span>';
+              }else {
+                  if (in_array($showcard_status->card_status, ['2e34609794290a770cb0349119d78d21', 'fe8ae3ced9e7e738d78589bf6610c4da']) && $showcard_status->work_flag != 'work_success') {
+                    echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
+                  } else if ($showcard_status->card_status == 'approve_workcheck') {
                     echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
                   } else {
                     if ($showcard_status->card_status == 'wait_approve') {
@@ -77,12 +81,7 @@ $card_detail = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='"
                     } else if ($showcard_status->card_status == 'wait_checkwork') {
                       echo '<span class="badge badge-primary">รอตรวจสอบงานเสร็จจากผู้แจ้ง</span>';
                     } else {
-                      if($showcard_status->card_status == 'work_cctv'){
-                        echo '<span class="badge badge-info">อนุมัติจาก Support Manager</span>';
-
-                      } else {
                       echo @cardStatus($showcard_status->card_status);
-                      }
                     }
                   }
                 }

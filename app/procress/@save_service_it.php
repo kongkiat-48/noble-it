@@ -446,7 +446,7 @@ if (isset($_POST['save_approve_cctv'])) {
             "problem_list",
             "card_status='" . $getFlag . "',
             work_flag = '" . $getFlag . "',
-            admin_update = '" . $name_key . "',
+            admin_update = '" . $name_key . "
       date_update='" . date("Y-m-d") . "',
       time_update='" . date("H:i:s") . "'", //เพิ่ม เวลา
             "ticket='" . htmlspecialchars($_POST['card_key']) . "'"

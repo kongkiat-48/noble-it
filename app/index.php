@@ -90,13 +90,13 @@ $stmt->execute();
   <div class="wrapper">
 
 
-    <aside class="left-sidebar bg-sidebar">
+    <aside class="left-sidebar bg-sidebar" style="background-color: <?php echo @$system_info->site_color_form; ?>">
       <div id="sidebar" class="sidebar sidebar-with-footer">
         <!-- Aplication Brand -->
         <div class="app-brand">
           <a href="#" title="<?php echo @$system_info->site_name; ?>">
             <img src="../resource/system/logo/<?php echo @$system_info->site_logo; ?>" width="30px" alt="><?php echo @$system_info->site_name; ?>" />
-            <span class="brand-name text-truncate font-weight-bold" style="font-size: 14px; color: <?php echo $system_info->site_color_name; ?>"><?php echo @$system_info->site_name; ?></span>
+            <span class="brand-name text-truncate font-weight-bold" style="font-size: 14px; color: blanchedalmond;"><?php echo @$system_info->site_name; ?></span>
           </a>
         </div>
         <!-- begin sidebar scrollbar -->
@@ -109,28 +109,28 @@ $stmt->execute();
             while ($showmenus = mysqli_fetch_object($getmenus)) {
 
               if ($_GET['p'] == $showmenus->menu_case) {
-                $show = '<li class="has-sub active"> <a class="sidenav-item-link" href="' . $showmenus->menu_link . '">
+                $show = '<li class="has-sub active"> <a class="sidenav-item-link" href="' . $showmenus->menu_link . '" style="color:blanchedalmond;">
                 <i class="fas ' . $showmenus->menu_icon . '"></i><span>' . $showmenus->menu_name . '</span></a></li>';
                 echo @accessMenus($showmenus->menu_key, $_SESSION['ukey'], $show);
               } else {
-                $show = '<li class="has-sub"> <a class="sidenav-item-link" href="' . $showmenus->menu_link . '">
+                $show = '<li class="has-sub"> <a class="sidenav-item-link" href="' . $showmenus->menu_link . '" style="color:blanchedalmond;">
                 <i class="fas ' . $showmenus->menu_icon . '"></i><span>' . $showmenus->menu_name . '</span></a></li>';
                 echo @accessMenus($showmenus->menu_key, $_SESSION['ukey'], $show);
               }
             }
             ?>
-            <li class="has-sub"> <a class="sidenav-item-link" target="_blank" href="https://mts.nbrest.com/app/index.php"><i class="fas fa-link"></i><span>แจ้งปัญหาฝ่ายช่าง</span></a></li>
+            <li class="has-sub"> <a class="sidenav-item-link" target="_blank" href="https://mts.nbrest.com/app/index.php" style="color:blanchedalmond;"><i class="fas fa-link"></i><span>แจ้งปัญหาฝ่ายช่าง</span></a></li>
           </ul>
 
 
         </div>
 
-        <div class="sidebar-footer">
+        <!-- <div class="sidebar-footer">
           <hr class="separator mb-0" />
-          <div class="sidebar-footer-content">
+          <div class="sidebar-footer-content" stype="background-color: <?php echo @$system_info->site_color_form; ?>">
             <small style="font-size: 8px;">&copy;&nbsp;2020 - <?php echo date('Y'); ?>&nbsp;Service Noble Restaurant. <br>Version 2.5</small>
           </div>
-        </div>
+        </div> -->
       </div>
     </aside>
 

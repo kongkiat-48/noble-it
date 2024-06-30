@@ -17,18 +17,18 @@ date_default_timezone_set('Asia/Bangkok');
 
 <?php
 $i = 0;
-$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id = '154' AND (manager_approve_status = 'Y' AND work_flag NOT IN ('work_cctv','work_success') OR card_status = '') ORDER BY ticket DESC LIMIT 10");
+$get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id IN ('154','204') AND (manager_approve_status = 'Y' OR work_flag NOT IN ('work_cctv','work_success' OR manager_approve IS NULL) AND card_status NOT IN ('work_cctv')) AND card_status = 'approve_mg' ORDER BY ticket DESC LIMIT 10");
 while ($show_total = mysqli_fetch_object($get_total)) {
     $i++;
 ?>
     <tr>
         <td><?php echo @$i; ?></td>
-        <td><a href="#" data-toggle="modal" data-target="#" data-whatever="<?php echo @$show_total->ticket; ?>" class="btn btn-sm btn-outline-info"><?php echo @$show_total->ticket; ?></a></td>
+        <td><a href="#" data-toggle="modal" data-target="#show_case" data-whatever="<?php echo @$show_total->ticket; ?>" class="btn btn-sm btn-outline-info"><?php echo @$show_total->ticket; ?></a></td>
         <td><?php echo @dateConvertor($show_total->date); ?></td>
         <td><?php echo $show_total->time_start; ?></td>
         <td>
             <?php
-            if (@$show_total->card_status == NULL && ($show_total->se_id != '8' && $show_total->manager_approve_status != 'Y')) {
+            if (@$show_total->card_status == 'approve_mg' && ($show_total->se_id != '8' && $show_total->manager_approve_status != 'Y')) {
                 echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
             } else if ($show_total->card_status == '2e34609794290a770cb0349119d78d21') {
                 echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
@@ -45,7 +45,15 @@ while ($show_total = mysqli_fetch_object($get_total)) {
             if ($show_total->date_update != '0000-00-00') {
                 echo @dateConvertor($show_total->date_update);
             } else {
-                echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                if (@$show_total->card_status == 'approve_mg' && ($show_total->se_id != '8' && $show_total->manager_approve_status != 'Y')) {
+                    echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                } else if ($show_total->card_status == '2e34609794290a770cb0349119d78d21') {
+                    echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
+                } else if ($show_total->se_id == '8' && $show_total->manager_approve_status == 'Y') {
+                    echo '<span class="badge badge-info">รอ Support Manager อนุมัติ</span>';
+                }else {
+                    echo @cardStatus($show_total->card_status);
+                }
             } ?>
         </td>
 

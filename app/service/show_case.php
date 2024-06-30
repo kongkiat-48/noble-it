@@ -42,11 +42,33 @@ $chk_case = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='" . 
             <div class="col-6">
               <label for="status">สถานะ</label>
               <h2 class="form-control"><?php
-                                        if (@$chk_case->card_status == NULL) {
+                                        if ($chk_case->se_id == '8' && $chk_case->se_li_id == '154' && $chk_case->manager_approve_status == 'Y' && $chk_case->card_status == NULL) {
+                                          echo '<span class="badge badge-info">รอ Support Manager อนุมัติ</span>';
+                                      } else if (@$chk_case->card_status == 'approve_mg' && ($chk_case->approve_department == 'IT' ||  $chk_case->approve_department != 'HR') || $chk_case->card_status == 'work_cctv' || $chk_case->card_status == 'work_hr') {
                                           echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
-                                        } else {
-                                          echo @cardStatus($chk_case->card_status);
-                                        }
+                                      } else if ($chk_case->card_status == 'wait_approve' && $chk_case->approve_department == 'IT') {
+                                          echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                                      } else if ($chk_case->card_status == 'wait_approve_hr' && $chk_case->approve_department == 'HR') {
+                                          echo '<span class="badge badge-info">รอการอนุมัติจาก HR</span>';
+                                      } else if ($chk_case->card_status == 'over_work') {
+                                          echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
+                                      } else if ($chk_case->card_status == 'reject') {
+                                          echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
+                                      } else {
+                                          if (in_array($chk_case->card_status, ['2e34609794290a770cb0349119d78d21', 'fe8ae3ced9e7e738d78589bf6610c4da']) && $chk_case->work_flag != 'work_success') {
+                                              echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
+                                          } else if ($chk_case->card_status == 'approve_workcheck') {
+                                              echo '<span class="badge badge-warning">รออนุมัติงานเสร็จ</span>';
+                                          } else {
+                                              if ($chk_case->card_status == 'wait_approve') {
+                                                  echo '<span class="badge badge-info">รออนุมัติแจ้งงาน</span>';
+                                              } else if ($chk_case->card_status == 'wait_checkwork') {
+                                                  echo '<span class="badge badge-primary">รอตรวจสอบงานเสร็จจากผู้แจ้ง</span>';
+                                              } else {
+                                                  echo @cardStatus($chk_case->card_status);
+                                              }
+                                          }
+                                      }
                                         ?></h2>
 
             </div>
@@ -136,7 +158,13 @@ $chk_case = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='" . 
           if ($chk_case->pic_before == null) {
             echo '<img class="img-thumbnail" src="../resource/it/file_pic_now/no-img.png" width="100%">';
           } else {
-            echo '<img class="img-thumbnail" src="../resource/it/delevymo/' . $chk_case->pic_before . '" width="100%">';
+            $extension = strtolower(pathinfo($chk_case->pic_before, PATHINFO_EXTENSION));
+            if ($extension === 'pdf') {
+              // echo "The file is a PDF.";
+              echo "<a href='../resource/it/delevymo/$chk_case->pic_before' target='_blank'>Open File : $chk_case->pic_before</a>";
+            } else {
+              echo '<img class="img-thumbnail" src="../resource/it/delevymo/' . $chk_case->pic_before . '" width="100%">';
+            }
           }
           ?>
         </div>
@@ -145,7 +173,14 @@ $chk_case = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='" . 
           if ($chk_case->pic_after == null) {
             echo '<img class="img-thumbnail" src="../resource/it/file_pic_now/no-img.png" width="100%">';
           } else {
-            echo '<img class="img-thumbnail" src="../resource/it/delevymo/' . $chk_case->pic_after . '" width="100%">';
+            $extension = strtolower(pathinfo($chk_case->pic_after, PATHINFO_EXTENSION));
+            if ($extension === 'pdf') {
+              echo "<a href='../resource/it/delevymo/$chk_case->pic_after' target='_blank'>Open File : $chk_case->pic_after</a>";
+
+            } else {
+              echo '<img class="img-thumbnail" src="../resource/it/delevymo/' . $chk_case->pic_after . '" width="100%">';
+            }
+
           }
           ?>
         </div>
