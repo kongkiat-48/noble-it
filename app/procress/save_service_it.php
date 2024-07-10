@@ -49,9 +49,9 @@ if ($getcontrol < 999) {
             //     time_start = '" . date("H:i:s") . "'");
             // } else {
             $getApproveDep = in_array($_POST['se_id'], ['13', '16']) ? 'HR' : 'IT';
-            if ($_POST['case'] == 'me') {
+            if (empty($_POST['approve'] || $_POST['approve'] == '-')) {
                 $chkManager =  $getdata->my_sql_query($connect, NULL, "manager", "user_key = '" . $_SESSION['ukey'] . "'");
-            } else if ($_POST['case'] == 'other') {
+            } else if (!empty($_POST['approve'] || $_POST['approve'] != '-')) {
                 $chkManager =  $getdata->my_sql_query($connect, NULL, "manager", "user_key = '" . $_POST['namecall'] . "'");
             } else {
                 $chkManager =  $getdata->my_sql_query($connect, NULL, "manager", "user_key = '" . $_SESSION['ukey'] . "'");
@@ -71,13 +71,15 @@ if ($getcontrol < 999) {
                 se_other = '" . htmlspecialchars($_POST['other']) . "',
                 se_asset = '" . htmlspecialchars($_POST['se_asset']) . "',
                 pic_before = '" . $fixname_pic . "',
-                se_namecall = '" . htmlspecialchars($_POST['namecall']) . "',
+                se_namecall = '" . $_SESSION['ukey'] . "',
                 se_location = '" . htmlspecialchars($_POST['location']) . "',
                 se_approve = '" . htmlspecialchars($_POST['approve']) . "',
+                card_status = 'approve_mg',
                 date = '" . date("Y-m-d") . "',
                 approve_department = '" . $getApproveDep . "',
                 time_start = '" . date("H:i:s") . "'");
             } else {
+                // se_namecall = '" . $_SESSION['ukey'] . "',
                 $getdata->my_sql_insert($connect, "problem_list", "
                 ticket='" . $runticket . "',
                 user_key ='" . $_SESSION['ukey'] . "',
@@ -88,9 +90,9 @@ if ($getcontrol < 999) {
                 se_other = '" . htmlspecialchars($_POST['other']) . "',
                 se_asset = '" . htmlspecialchars($_POST['se_asset']) . "',
                 pic_before = '" . $fixname_pic . "',
-                se_namecall = '" . htmlspecialchars($_POST['namecall']) . "',
+                se_namecall = '" . $chkManager->user_key . "',
                 se_location = '" . htmlspecialchars($_POST['location']) . "',
-                se_approve = '" . htmlspecialchars($_POST['approve']) . "',
+                se_approve = '" . getemployee($chkManager->manager_user_key) . "',
                 card_status = 'wait_approve',
                 manager_approve = '" . $chkManager->manager_user_key . "',
                 manager_approve_status = 'N',
@@ -635,7 +637,17 @@ if (isset($_POST['save_checkwork_user'])) {
 if (isset($_POST['save_approve_hr'])) {
     if (!empty($_POST['approve_status'])) {
         // $getFlag = $_POST['approve_status'] == "Y" ? null : $_POST['approve_status'];
-        $getFlag = $_POST['approve_status'] == "Y" ? 'work_hr' : $_POST['approve_status'];
+        // $getFlag = $_POST['approve_status'] == "Y" ? 'work_hr' : $_POST['approve_status'];
+        if($_POST['approve_status'] == "Y"){
+            $getFlag = 'work_hr';
+            $isAlert = 'อนุมัติจาก Hr';
+        } else if($_POST['approve_status'] == "reject_hr"){
+            $getFlag = 'reject_hr';
+            $isAlert = 'ไม่อนุมัติจาก Hr';
+        } else {
+            $getFlag =  $_POST['approve_status'];
+            $isAlert = 'ยกเลิกจาก Hr';
+        }
 
         $getdata->my_sql_update(
             $connect,
@@ -672,12 +684,12 @@ if (isset($_POST['save_approve_hr'])) {
         $detail = $_POST['detail'];
         $line_token = $getalert->alert_line_token; // Token
         $line_text = "
-         /*** อนุมัติจาก HR ***/
+         /*** $isAlert ***/
          ------------------------
          Ticket : $ticket
          ------------------------
          ผู้ดำเนินการ : $name_admin
-         สถานะ :  อนุมัติจาก HR
+         สถานะ :  $isAlert
          ผู้แจ้ง : " . @getemployee($namecall) . "
          สาขา : $location
          รายละเอียด : $detail

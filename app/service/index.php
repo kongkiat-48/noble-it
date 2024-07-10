@@ -195,7 +195,7 @@ include_once 'procress/dataSave.php';
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
               <div class="text-md font-weight-bold text-success text-uppercase mb-1">จำนวนรายการแจ้งปัญหาที่เสร็จแล้ว</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IN ('2e34609794290a770cb0349119d78d21','2376b33c92767c1437421a99bbc7164f','fe8ae3ced9e7e738d78589bf6610c4da') AND (date LIKE '%" . date("Y-m") . "%' ) AND se_id != '8' AND se_li_id != '154'");
+              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IN ('2e34609794290a770cb0349119d78d21','2376b33c92767c1437421a99bbc7164f','fe8ae3ced9e7e738d78589bf6610c4da','9b5292adfe68103f2a31b5cfbba64fd7') AND work_flag IN ('work_success') AND (date LIKE '%" . date("Y-m") . "%' ) AND se_id != '8' AND se_li_id != '154'");
                                                                   echo @number_format($getall); ?></div>
             </div>
             <div class="col-auto">
@@ -212,7 +212,7 @@ include_once 'procress/dataSave.php';
           <div class="row no-gutters align-items-center">
             <div class="col mr-2">
               <div class="text-md font-weight-bold text-warning text-uppercase mb-1">จำนวนรายการแจ้งปัญหารอการแก้ไข</div>
-              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getwait = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IS NULL AND se_id != '8' AND se_li_id != '154'");
+              <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getwait = $getdata->my_sql_show_rows($connect, "problem_list", "card_status IS NULL OR card_status = 'approve_mg' AND se_id != '8' AND se_li_id != '154'");
                                                                   echo @number_format($getwait); ?></div>
             </div>
             <div class="col-auto">
@@ -293,7 +293,7 @@ include_once 'procress/dataSave.php';
             <?php
             $i = 0;
             // $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status NOT IN ('2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214','2376b33c92767c1437421a99bbc7164f','wait_approve') OR card_status IS NULL AND approve_department = 'IT' ORDER BY ticket DESC");
-            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status NOT IN ('2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214','2376b33c92767c1437421a99bbc7164f','wait_approve','approve_workcheck','fe8ae3ced9e7e738d78589bf6610c4da','wait_checkwork','wait_approve_hr') AND approve_department IN ('IT','HR') AND (se_id != '8' AND se_li_id != '154') OR (manager_approve IS NULL AND se_id != '8' AND se_li_id != '154') ORDER BY ticket DESC");
+            $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "card_status NOT IN ('2e34609794290a770cb0349119d78d21','57995055c28df9e82476a54f852bd214','2376b33c92767c1437421a99bbc7164f','wait_approve','approve_workcheck','fe8ae3ced9e7e738d78589bf6610c4da','wait_checkwork','wait_approve_hr','9b5292adfe68103f2a31b5cfbba64fd7','reject_hr') AND approve_department IN ('IT','HR') AND (se_id != '8' AND se_li_id != '154') OR (manager_approve IS NULL AND se_id != '8' AND se_li_id != '154') AND (work_flag NOT IN ('work_success')) ORDER BY ticket DESC");
             while ($show_total = mysqli_fetch_object($get_total)) {
               $i++;
             ?>
@@ -427,12 +427,14 @@ include_once 'procress/dataSave.php';
                   ?>
                 </td>
                 <td class="text-center">
-                  <?php
-                  if (@$show_total->date_update == '0000-00-00') {
-                    echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
-                  } else {
-                    echo @dateConvertor($show_total->date_update);
-                  } ?>
+                <?php
+                      if (@$show_total->date_update == '0000-00-00' && $show_total->card_status == 'approve_mg') {
+                        echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                      } else if ($show_total->date_update == '0000-00-00') {
+                        echo @cardStatus($show_total->card_status);
+                      } else {
+                        echo @dateConvertor($show_total->date_update);
+                      }  ?>
                 </td>
                 <td class="text-center"> <?php echo '
                 <a href="?p=case_all_service&key=' . @$show_total->ticket . '" class="btn btn-sm btn-success" data-top="toptitle" data-placement="top" title="ตรวจสอบ"><span class="fa fa-list-ul"></span></a>'; ?>
@@ -527,8 +529,10 @@ include_once 'procress/dataSave.php';
                     </td>
                     <td>
                       <?php
-                      if (@$show_total->date_update == '0000-00-00') {
+                      if (@$show_total->date_update == '0000-00-00' && $show_total->card_status == 'approve_mg') {
                         echo '<span class="badge badge-warning">รอดำเนินการแก้ไข</span>';
+                      } else if ($show_total->date_update == '0000-00-00') {
+                        echo @cardStatus($show_total->card_status);
                       } else {
                         echo @dateConvertor($show_total->date_update);
                       }  ?>

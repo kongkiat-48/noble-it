@@ -68,7 +68,9 @@ $card_detail = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='"
                   echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
                 } else if ($showcard_status->card_status == 'reject') {
                   echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
-                } else if ($showcard_status->card_status == null) {
+                } else if ($showcard_status->card_status == 'reject_hr') {
+                  echo '<span class="badge badge-danger">ไม่อนุมัติจาก Hr</span>';
+              } else if ($showcard_status->card_status == null) {
                   echo '<span class="badge badge-danger">ยกเลิกงานโดยผู้แจ้ง</span>';
               }else {
                   if (in_array($showcard_status->card_status, ['2e34609794290a770cb0349119d78d21', 'fe8ae3ced9e7e738d78589bf6610c4da']) && $showcard_status->work_flag != 'work_success') {

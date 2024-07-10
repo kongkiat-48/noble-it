@@ -54,7 +54,11 @@ $chk_case = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='" . 
                                           echo '<span class="badge badge-danger">ปิดงานอัตโนมัติ</span>';
                                       } else if ($chk_case->card_status == 'reject') {
                                           echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
-                                      } else {
+                                      } else if ($show_total->card_status == 'reject_hr') {
+                                        echo '<span class="badge badge-danger">ไม่อนุมัติจาก Hr</span>';
+                                    } else if ($show_total->card_status == 'reject') {
+                                        echo '<span class="badge badge-warning">ตรวจสอบอีกครั้ง</span>';
+                                    } else {
                                           if (in_array($chk_case->card_status, ['2e34609794290a770cb0349119d78d21', 'fe8ae3ced9e7e738d78589bf6610c4da']) && $chk_case->work_flag != 'work_success') {
                                               echo '<span class="badge badge-info">รอ Support Manager ตรวจสอบ</span>';
                                           } else if ($chk_case->card_status == 'approve_workcheck') {
@@ -139,10 +143,12 @@ $chk_case = $getdata->my_sql_query($connect, NULL, "problem_list", "ticket='" . 
               ?>
               <input type="text" name="namecall" id="namecall" class="form-control" readonly value="<?php echo $chkName; ?>">
             </div>
+            <?php if(!empty($chk_case->se_location)) {?>
             <div class="col-md-6 col-sm-12">
               <label for="location">สาขา</label>
               <input type="text" name="location" id="location" class="form-control" readonly value="<?php echo @prefixbranch($chk_case->se_location); ?>">
             </div>
+            <?php } ?>
           </div>
           <div class="form-group row">
             <div class="col-12">

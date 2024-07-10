@@ -16,7 +16,7 @@ if(isset($_POST['value'])) {
     $chkManager =  $getdata->my_sql_query($connect, NULL, "manager", "user_key = '" . $selectedValue . "'");
 
     if(COUNT($chkManager) == 0) {
-        echo '-';
+        echo null;
     } else {
         echo getemployee($chkManager->manager_user_key);
     }

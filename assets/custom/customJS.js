@@ -155,6 +155,50 @@ $(function () {
     ],
   });
 
+  $('#all-work').DataTable({
+    dom: 'Bfrtip',
+    scrollX: true,
+    searching: true,
+    aLengthMenu: [[50, 100, 150, 200, -1], [50, 100, 150, 200, "All"]],
+    pageLength: 50,
+    buttons: [
+      // {
+      //   extend: "print",
+      //   customize: function (win) {
+
+      //     var css = '@page { size: landscape; }',
+      //       head = win.document.head || win.document.getElementsByTagName('head')[0],
+      //       style = win.document.createElement('style');
+
+      //     style.type = 'text/css';
+      //     style.media = 'print';
+
+      //     if (style.styleSheet) {
+      //       style.styleSheet.cssText = css;
+      //     }
+      //     else {
+      //       style.appendChild(win.document.createTextNode(css));
+      //     }
+
+      //     head.appendChild(style);
+      //   },
+      //   exportOptions: {
+      //     columns: ':visible'
+      //   }
+
+      // },
+
+      // {
+      //   extend: 'excelHtml5',
+      //   autoFilter: true,
+      //   sheetName: 'Exported data'
+      // },
+      'colvis',
+      'pageLength'
+
+    ],
+  });
+
 
 
   $('#for-home').DataTable({

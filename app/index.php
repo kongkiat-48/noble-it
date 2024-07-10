@@ -125,12 +125,12 @@ $stmt->execute();
 
         </div>
 
-        <!-- <div class="sidebar-footer">
+        <div class="sidebar-footer" style="background-color: <?php echo @$system_info->site_color_form; ?>">
           <hr class="separator mb-0" />
           <div class="sidebar-footer-content" stype="background-color: <?php echo @$system_info->site_color_form; ?>">
-            <small style="font-size: 8px;">&copy;&nbsp;2020 - <?php echo date('Y'); ?>&nbsp;Service Noble Restaurant. <br>Version 2.5</small>
-          </div>
-        </div> -->
+            <small style="font-size: 8px;">&copy;&nbsp;2020 - <?php echo date('Y'); ?>&nbsp;Service Noble Restaurant. <br>Version 3.0</small>
+          <!-- </div> -->
+        </div>
       </div>
     </aside>
 

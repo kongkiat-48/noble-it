@@ -109,10 +109,12 @@ $get_admin = $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $_S
             ?>
             <input type="text" name="namecall" id="namecall" class="form-control" readonly value="<?php echo $chkName; ?>">
         </div>
+        <?php if(!empty($chk_case->se_location)) {?>
         <div class="col-md-6 col-sm-12">
             <label for="location">สาขา</label>
             <input type="text" name="location" id="location" class="form-control" readonly value="<?php echo @prefixbranch($chk_case->se_location); ?>">
         </div>
+        <?php } ?>
     </div>
     <div class="form-group row">
         <div class="col-12">

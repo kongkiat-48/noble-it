@@ -3,7 +3,7 @@ $name_key = $userdata->user_key; // show key md5 name
 $fullname = @prefixConvertorUsername($name_key);
 $getalert = $getdata->my_sql_query($connect, NULL, "system_alert", NULL);
 if (isset($_POST['save_offcase'])) {
-    if (htmlspecialchars($_POST['off_case_status']) != NULL && htmlspecialchars($_POST['date_off_case']) != NULL) {
+    if (htmlspecialchars($_POST['off_case_status']) != NULL) {
 
         if (!defined('pic')) {
             if (!defined('pic')) {
@@ -30,7 +30,7 @@ if (isset($_POST['save_offcase'])) {
             "card_status='" . htmlspecialchars($_POST['off_case_status']) . "',
             se_price = '" . htmlspecialchars($_POST['price']) . "',
       admin_update='" . $name_key . "',
-      date_update='" . htmlspecialchars($_POST['date_off_case']) . "',
+      date_update='" . !empty($_POST['date_off_case']) ? htmlspecialchars($_POST['date_off_case']) : '0000-00-00' . "',
       time_update='" . date("H:i:s") . "'", //เพิ่ม เวลา
             "ticket='" . htmlspecialchars($_POST['card_key']) . "'"
         );

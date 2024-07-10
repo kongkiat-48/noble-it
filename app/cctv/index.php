@@ -88,7 +88,7 @@ include_once 'service/procress/dataSave.php';
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-md font-weight-bold text-primary text-uppercase mb-1">จำนวนรายการขอดูกล้องเดือน <u><?php echo @month(); ?></u></div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "ID <> 'hidden' AND (date LIKE '%" . date("Y-m") . "%' ) AND se_id = '8' AND se_li_id = '154'");
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "ID <> 'hidden' AND (date LIKE '%" . date("Y-m") . "%' ) AND se_id = '8' AND se_li_id IN ('154','204')");
                                                                             echo @number_format($getall); ?></div>
                     </div>
                     <div class="col-auto">
@@ -105,7 +105,7 @@ include_once 'service/procress/dataSave.php';
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-md font-weight-bold text-success text-uppercase mb-1">จำนวนรายการดำเนินการแล้ว</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "ID <> 'hidden' AND (date LIKE '%" . date("Y-m-d") . "%' ) AND card_status = 'fe8ae3ced9e7e738d78589bf6610c4da' AND se_id = '8' AND se_li_id = '154'");
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "date LIKE '%" . date("Y-m") . "%' AND card_status IN ('fe8ae3ced9e7e738d78589bf6610c4da','9b5292adfe68103f2a31b5cfbba64fd7') AND work_flag = 'work_success' AND se_id = '8' AND se_li_id IN ('154','204')");
                                                                             echo @number_format($getall); ?></div>
                     </div>
                     <div class="col-auto">
@@ -121,7 +121,7 @@ include_once 'service/procress/dataSave.php';
                 <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                         <div class="text-md font-weight-bold text-warning text-uppercase mb-1">จำนวนรายการที่รอดำเนินการ</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "date LIKE '%" . date("Y-m") . "%' AND (card_status NOT IN ('fe8ae3ced9e7e738d78589bf6610c4da','2e34609794290a770cb0349119d78d21') OR work_flag != 'work_success') AND se_id = '8' AND se_li_id = '154'");
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?php @$getall = $getdata->my_sql_show_rows($connect, "problem_list", "date LIKE '%" . date("Y-m") . "%' AND (card_status NOT IN ('fe8ae3ced9e7e738d78589bf6610c4da','2e34609794290a770cb0349119d78d21') OR work_flag != 'work_success') AND se_id = '8' AND se_li_id IN ('154','204')");
                                                                             echo @number_format($getall); ?></div>
                     </div>
                     <div class="col-auto">
@@ -168,7 +168,7 @@ include_once 'service/procress/dataSave.php';
                         $i = 0;
                         // $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id = '154' AND  manager_approve_status = 'Y' AND (card_status NOT IN ('fe8ae3ced9e7e738d78589bf6610c4da','2e34609794290a770cb0349119d78d21') AND work_flag NOT IN  ('work_success','')) ORDER BY CONVERT(ID, SIGNED) DESC,ID DESC,date ASC");
                         // $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id IN ('154','204') AND manager_approve_status = 'Y' AND (card_status NOT IN ('fe8ae3ced9e7e738d78589bf6610c4da','2e34609794290a770cb0349119d78d21') AND work_flag NOT IN ('work_success')) OR (manager_approve IS NULL AND se_id = '8' AND se_li_id IN ('154','204') AND card_status IN ('work_cctv') AND manager_approve_status = 'Y') ORDER BY CONVERT(ID, SIGNED) DESC,ID DESC,date ASC");
-                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id IN ('154','204') AND manager_approve_status = 'Y' AND (card_status NOT IN ('fe8ae3ced9e7e738d78589bf6610c4da','2e34609794290a770cb0349119d78d21','approve_mg') OR work_flag NOT IN ('work_success')) OR (manager_approve IS NULL AND se_id = '8' AND se_li_id IN ('154','204')) AND card_status IN ('work_cctv') ORDER BY CONVERT(ID, SIGNED) DESC,ID DESC,date ASC");
+                        $get_total = $getdata->my_sql_select($connect, NULL, "problem_list", "se_id = '8' AND se_li_id IN ('154','204') AND manager_approve_status = 'Y' AND (card_status NOT IN ('fe8ae3ced9e7e738d78589bf6610c4da','2e34609794290a770cb0349119d78d21','approve_mg','9b5292adfe68103f2a31b5cfbba64fd7') OR work_flag NOT IN ('work_success')) OR (manager_approve IS NULL AND se_id = '8' AND se_li_id IN ('154','204')) AND card_status IN ('work_cctv') ORDER BY CONVERT(ID, SIGNED) DESC,ID DESC,date ASC");
 
                         while ($show_total = mysqli_fetch_object($get_total)) {
                             $i++;

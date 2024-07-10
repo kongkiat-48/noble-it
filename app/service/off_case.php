@@ -23,7 +23,7 @@ $get_admin = $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $_S
       <select name="off_case_status" id="off_case_status" class="form-control select2bs4" required>
         <option value="" selected>--- เลือกข้อมูล ---</option>
         <?php
-        $select_status = $getdata->my_sql_select($connect, NULL, "card_type", "ctype_status ='1' ORDER BY ctype_insert");
+        $select_status = $getdata->my_sql_select($connect, NULL, "card_type", "ctype_status ='1' AND ctype_key NOT IN ('9b5292adfe68103f2a31b5cfbba64fd7') ORDER BY ctype_insert");
         if ($_SESSION['uclass'] == 1) {
           echo '<option value="57995055c28df9e82476a54f852bd214">ยกเลิกการแจ้ง</option>';
           echo '<option value="5cafc78523f4f5e4812f9545b2ba5ae7">แจ้งดำเนินการอีกครั้ง</option>';
@@ -51,14 +51,14 @@ $get_admin = $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $_S
       <?php
       if ($_SESSION['uclass'] == 1) { ?>
         <label for="date_off_case">วันที่แจ้ง</label>
-        <input type="date" class="form-control" name="date_off_case" id="date_off_case" value="<?php echo date("Y-m-d"); ?>" required readonly>
+        <input type="date" class="form-control" name="date_off_case" id="date_off_case" value="<?php echo date("Y-m-d"); ?>" readonly>
       <?php } else { ?>
         <?php if ($chk_case->date_update != '0000-00-00') { ?>
           <label for="date_off_case">วันที่เสร็จ</label>
-          <input type="date" class="form-control" name="date_off_case" id="date_off_case" value="<?php echo $chk_case->date_update; ?>" required>
+          <input type="date" class="form-control" name="date_off_case" id="date_off_case" value="<?php echo $chk_case->date_update; ?>">
         <?php } else { ?>
           <label for="date_off_case">วันที่เสร็จ</label>
-          <input type="date" class="form-control" name="date_off_case" id="date_off_case" required>
+          <input type="date" class="form-control" name="date_off_case" id="date_off_case">
           <div class="invalid-feedback">
             ระบุ วันที่แล้วเสร็จ.
           </div>
@@ -91,10 +91,7 @@ $get_admin = $getdata->my_sql_query($connect, NULL, "user", "user_key = '" . $_S
       <div class="col-md-6 col-sm-12">
         <label for="currency-field">ค่าใช้จ่าย</label>
 
-        <input type="text" class="form-control" name="price" id="currency-field" value="<?php
-                                                                                        if ($chk_case->se_price != NULL) {
-                                                                                          echo $chk_case->se_price;
-                                                                                        } ?>" required data-type="currency" placeholder="0.00">
+        <input type="text" class="form-control" name="price" id="currency-field" value="<?php echo $chk_case->se_price != null ? $chk_case->se_price : '0.00'; ?>" required data-type="currency" placeholder="0.00">
         <div class="invalid-feedback">
           ระบุ ค่าใช้จ่าย.
         </div>
